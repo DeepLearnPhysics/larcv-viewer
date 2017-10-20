@@ -55,9 +55,13 @@ class voxel3d(recoBase):
 
         view_manager.getView().updateMeta(self._meta)
 
+
+
         self._id_summed_charge = dict()
         # # This section draws voxels onto the environment:
         for voxel in voxels:
+            if voxel.ID() ==self._meta.invalid_voxel_id():
+                continue
             if voxel.ID() in self._id_summed_charge:
                 self._id_summed_charge[voxel.ID()] += voxel.Value()
             else:
@@ -81,6 +85,7 @@ class voxel3d(recoBase):
         verts, faces, colors = self.buildTriangleArray(self._id_summed_charge,
                                                        view_manager)
 
+
         #make a mesh item: 
         mesh = gl.GLMeshItem(vertexes=verts,
                              faces=faces,
@@ -88,12 +93,13 @@ class voxel3d(recoBase):
                              smooth=False)
         # mesh.setGLOptions("additive")        
         self._gl_voxel_mesh = mesh
-        view_manager.getView().addItem(mesh)
+        view_manager.getView().addItem(self._gl_voxel_mesh)
 
     def buildTriangleArray(self, id_summed_charge, view_manager):
         verts = None
         faces = None
         colors = None
+
 
         i = 0
         for voxel_id in id_summed_charge:
@@ -134,7 +140,6 @@ class voxel3d(recoBase):
         return verts, faces, colors
 
     def makeBox(self, voxel_id, meta):
-        print meta.valid()
         verts_box = numpy.copy(self._box_template)
         #Scale all the points of the box to the right voxel size:
         verts_box[:,0] *= meta.size_voxel_x()
@@ -157,6 +162,7 @@ class voxel3d(recoBase):
         # color_arr[:] = [1,1,1,1]
 
         return verts_box
+
 
     def getColor(self, _lookupTable, _levels, _voxel_value ):
         _min = _levels[0]
