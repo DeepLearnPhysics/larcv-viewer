@@ -209,9 +209,9 @@ class gui3D(QtGui.QWidget):
 
     # Get the min and max values for height, length, width:
 
-    width = self._event_manager.meta().MaxX() - self._event_manager.meta().MinX()
-    height = self._event_manager.meta().MaxY() - self._event_manager.meta().MinY()
-    length = self._event_manager.meta().MaxZ() - self._event_manager.meta().MinZ()
+    width  = self._event_manager.meta().max_x() - self._event_manager.meta().min_x()
+    height = self._event_manager.meta().max_y() - self._event_manager.meta().min_y()
+    length = self._event_manager.meta().max_z() - self._event_manager.meta().min_z()
     
 
     # Define the x,y,z location of the camera and world center

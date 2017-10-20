@@ -13,7 +13,7 @@ class voxel3d(recoBase):
 
     def __init__(self):
         super(voxel3d, self).__init__()
-        self._productName = 'voxel3d'
+        self._product_name = 'voxel3d'
         self._product_id = 5
         self._gl_voxel_mesh = None
         self._id_summed_charge = dict()
@@ -48,10 +48,10 @@ class voxel3d(recoBase):
     def drawObjects(self, view_manager, io_manager, meta):
 
         #Get the list of voxel3d sets:
-        event_voxel3d = io_manager.get_data(self._product_id, str(self._producerName))
+        event_voxel3d = io_manager.get_data(self._product_name, str(self._producerName))
 
-        voxels = event_voxel3d.GetVoxelSet()
-        self._meta = event_voxel3d.GetVoxelMeta() 
+        voxels = event_voxel3d.VoxelArray()
+        self._meta = event_voxel3d.Meta() 
 
         view_manager.getView().updateMeta(self._meta)
 
@@ -134,22 +134,23 @@ class voxel3d(recoBase):
         return verts, faces, colors
 
     def makeBox(self, voxel_id, meta):
+        print meta.valid()
         verts_box = numpy.copy(self._box_template)
         #Scale all the points of the box to the right voxel size:
-        verts_box[:,0] *= meta.SizeVoxelX()
-        verts_box[:,1] *= meta.SizeVoxelY()
-        verts_box[:,2] *= meta.SizeVoxelZ()
+        verts_box[:,0] *= meta.size_voxel_x()
+        verts_box[:,1] *= meta.size_voxel_y()
+        verts_box[:,2] *= meta.size_voxel_z()
 
         #Shift the points to put the center of the cube at (0,0,0)
-        verts_box[:,0] -= 0.5*meta.SizeVoxelX()
-        verts_box[:,1] -= 0.5*meta.SizeVoxelY()
-        verts_box[:,2] -= 0.5*meta.SizeVoxelZ()
+        verts_box[:,0] -= 0.5*meta.size_voxel_x()
+        verts_box[:,1] -= 0.5*meta.size_voxel_y()
+        verts_box[:,2] -= 0.5*meta.size_voxel_z()
         
         #Move the points to the right coordinate in this space
 
-        verts_box[:,0] += meta.X(voxel_id) - meta.MinX()
-        verts_box[:,1] += meta.Y(voxel_id) - meta.MinY()
-        verts_box[:,2] += meta.Z(voxel_id) - meta.MinZ()
+        verts_box[:,0] += meta.pos_x(voxel_id) - meta.min_x()
+        verts_box[:,1] += meta.pos_y(voxel_id) - meta.min_y()
+        verts_box[:,2] += meta.pos_z(voxel_id) - meta.min_z()
 
 
         # color_arr = numpy.ndarray((12, 4))

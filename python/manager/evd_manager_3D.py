@@ -49,26 +49,17 @@ class evd_manager_3D(evd_manager_base):
         self._driver.initialize()
         self.go_to_entry(0)
 
-        self._data_product_rmap = dict()
-
-        for x in xrange(larcv.kProductUnknown):    
-            self._data_product_rmap.update({larcv.ProductName(x)  : x })
-            # print larcv.ProductName(x), ": \r"
-            # for val in self._io_manager.producer_list(x):
-            #     print val + " \r"
-            # print
-
         self.refresh_meta()
         
 
     def refresh_meta(self, producer=None):
         # Read in any of the image2d products if none is specified.
         # Use it's meta info to build up the meta for the viewer
-        _id = self._data_product_rmap['voxel3d']
-        _producer = self._io_manager.producer_list(_id).front()
-        _event_voxel3d = self._io_manager.get_data(_id, _producer)
+
+        _producer = self._io_manager.producer_list('voxel3d').front()
+        _event_voxel3d = self._io_manager.get_data('voxel3d', _producer)
         
-        self._meta = _event_voxel3d.GetVoxelMeta()
+        self._meta = _event_voxel3d.Meta()
 
 
     # this function is meant for the first request to draw an object or

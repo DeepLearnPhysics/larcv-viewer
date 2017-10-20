@@ -31,9 +31,9 @@ class viewport3D(gl.GLViewWidget):
 
     def updateMeta(self,meta):
 
-        _len_x = meta.MaxX() - meta.MinX()
-        _len_y = meta.MaxY() - meta.MinY()
-        _len_z = meta.MaxZ() - meta.MinZ()
+        _len_x = meta.max_x() - meta.min_x()
+        _len_y = meta.max_y() - meta.min_y()
+        _len_z = meta.max_z() - meta.min_z()
     
         self.setCenter((0,0,0))
     

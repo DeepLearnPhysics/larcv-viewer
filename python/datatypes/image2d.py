@@ -7,15 +7,14 @@ class image2d(recoBase):
 
     def __init__(self):
         super(image2d, self).__init__()
-        self._productName = 'image2d'
-        self._product_id = 0
+        self._product_name = 'image2d'
         larcv.load_pyutil()
 
     # this is the function that actually draws the cluster.
     def drawObjects(self, view_manager, io_manager, meta):
 
 
-        image2d_data = io_manager.get_data(self._product_id, str(self._producerName))
+        image2d_data = io_manager.get_data(self._product_name, str(self._producerName))
 
         for image2d_plane in image2d_data.Image2DArray():
             thisView = view_manager.getViewPorts()[image2d_plane.meta().plane()]

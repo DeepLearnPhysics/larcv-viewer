@@ -46,26 +46,14 @@ class evd_manager_base(QtCore.QObject):
 
         self._driver.initialize()
 
-        self._data_product_rmap = dict()
-
-        for x in xrange(larcv.kProductUnknown):    
-            self._data_product_rmap.update({larcv.ProductName(x)  : x })
-            # print larcv.ProductName(x), ": \r"
-            # for val in self._io_manager.producer_list(x):
-            #     print val + " \r"
-            # print
-
-        # print self._data_product_rmap
-
         self.refresh_meta()
 
 
     def refresh_meta(self):
         # Read in any of the image2d products if none is specified.
         # Use it's meta info to build up the meta for the viewer
-        _id = self._data_product_rmap['image2d']
-        _producer = self._io_manager.producer_list(_id).front()
-        _event_image2d = self._io_manager.get_data(_id, _producer)
+        _producer = self._io_manager.producer_list('image2d').front()
+        _event_image2d = self._io_manager.get_data('image2d',_producer)
         
         self._meta.refresh(_event_image2d)
 
@@ -74,9 +62,8 @@ class evd_manager_base(QtCore.QObject):
 
     # This function will return all producers for the given product
     def getProducers(self, product):
-        _id = self._data_product_rmap[product]
         if self._io_manager is not None:
-            return self._io_manager.producer_list(_id)
+            return self._io_manager.producer_list(product)
 
     # This function returns the list of products that can be drawn:
     def getDrawableProducts(self):
