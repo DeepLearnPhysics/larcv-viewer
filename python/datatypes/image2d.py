@@ -16,8 +16,8 @@ class image2d(recoBase):
 
         image2d_data = io_manager.get_data(self._product_name, str(self._producerName))
 
-        for image2d_plane in image2d_data.Image2DArray():
-            thisView = view_manager.getViewPorts()[image2d_plane.meta().plane()]
+        for image2d_plane in image2d_data.image2d_array():
+            thisView = view_manager.getViewPorts()[image2d_plane.meta().id()]
 
             image_as_ndarray = larcv.as_ndarray(image2d_plane)
             thisView._item.setImage(image_as_ndarray)

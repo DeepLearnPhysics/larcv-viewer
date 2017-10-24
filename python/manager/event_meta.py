@@ -10,9 +10,9 @@ class event_meta(object):
 
     def refresh(self, larcv_event_image2d):
 
-        for image2d in larcv_event_image2d.Image2DArray():
+        for image2d in larcv_event_image2d.image2d_array():
             _meta = image2d.meta()
-            self._image_metas[_meta.plane()] = _meta
+            self._image_metas[_meta.id()] = _meta
 
     def meta(self, plane):
         return self._image_metas[plane]
