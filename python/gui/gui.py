@@ -31,8 +31,8 @@ class gui(QtGui.QWidget):
 
   def metaChanged(self, meta):
     self._event_manager.refresh_meta()
-    for view in self._view_manager.getViewPorts():
-      view.updateRange(meta.meta(view.plane()))
+    for plane, view in self._view_manager.getViewPorts().iteritems():
+      view.updateRange(meta)
 
   def update(self):
     # set the text boxes correctly:
@@ -161,10 +161,10 @@ class gui(QtGui.QWidget):
 
   def falseColorWorker(self):
     if self._falseColorSelection.isChecked():
-      for view in self._view_manager.getViewPorts():
+      for plane, view in self._view_manager.getViewPorts().iteritems():
         view.falseColor(True)
     else:
-      for view in self._view_manager.getViewPorts():
+      for plane, view in self._view_manager.getViewPorts().iteritems():
         view.falseColor(False)
 
   def restoreDefaultsWorker(self):
@@ -307,7 +307,7 @@ class gui(QtGui.QWidget):
     self.southLayout = self.getSouthLayout()
 
     # Area to hold data:
-    nviews = self._event_manager.n_views()
+    nviews = self._event_manager.meta().n_views()
     # nviews = self._baseData._nviews
     for i in range(0, nviews):
       # These boxes hold the wire/time views:

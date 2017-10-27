@@ -50,12 +50,29 @@ class evd_manager_base(QtCore.QObject):
 
 
     def refresh_meta(self):
-        # Read in any of the image2d products if none is specified.
-        # Use it's meta info to build up the meta for the viewer
-        _producer = self._io_manager.producer_list('image2d').front()
-        _event_image2d = self._io_manager.get_data('image2d',_producer)
+        # # Read in any of the image2d products if none is specified.
+        # # Use it's meta info to build up the meta for the viewer
+        # _producers = self._io_manager.producer_list('image2d')
+        # if 'wire' in _producers:
+        #     _producer = 'wire'
+        # else:
+        #     _producer = _producers[-1]
+        # _event_image2d = self._io_manager.get_data('image2d',_producer)
         
-        self._meta.refresh(_event_image2d)
+        # Look for the meta_event_tree to get the event meta out of the file:
+        _producers = self._io_manager.producer_list('meta')
+        if '2D' in _producers:
+            _producer = '2D'
+        elif _producers.size() > 0:
+            _producer = _producers[0]
+        else:
+            print "Error, no meta available for the viewer."
+            exit()
+
+        _global_meta = self._io_manager.get_data('meta',_producer)
+
+
+        self._meta.refresh(_global_meta)
 
     def meta(self):
         return self._meta

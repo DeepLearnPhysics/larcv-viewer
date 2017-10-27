@@ -154,25 +154,38 @@ class viewport(pg.GraphicsLayoutWidget):
 
     # Major ticks are the pixel widths, or 1
     # Minor ticks are 1
-    x_major_tick_vals   = numpy.arange(meta.cols(), step=50)
+    x_major_tick_vals   = numpy.arange(meta.cols(self._plane), step=1)
     self._x_max_range = (x_major_tick_vals[-1], x_major_tick_vals[0])
-    x_major_tick_labels = numpy.arange(meta.min_x(), meta.max_x(), 50*int(meta.pixel_width()))
+    x_major_tick_labels = numpy.arange(meta.min_x(self._plane), meta.max_x(self._plane), meta.comp_x(self._plane))
     x_major = numpy.column_stack((x_major_tick_vals, x_major_tick_labels))
 
-    x_minor_tick_vals = numpy.arange(int(meta.width()))
-    x_minor_tick_labels = numpy.arange(meta.min_x(), meta.max_x(), 1)
+    x_minor_tick_vals = numpy.arange(meta.cols(self._plane), step=1./meta.comp_x(self._plane))
+    x_minor_tick_labels = numpy.arange(meta.min_x(self._plane), meta.max_x(self._plane), 1)
     x_minor = numpy.column_stack((x_minor_tick_vals, x_minor_tick_labels))
+
+    #Downsample the major ticks until they are 100x more than minor ticks:
+    while x_minor.shape[0] / x_major.shape[0] < 100:
+      x_major = x_major[::2,:]
+      if len(x_major) < 10:
+        break
 
     x_ticks = [x_major, x_minor]
 
-    y_major_tick_vals   = numpy.arange(meta.rows(), step=50)
+
+    y_major_tick_vals   = numpy.arange(meta.rows(self._plane), step=1)
     self._y_max_range = (y_major_tick_vals[-1], y_major_tick_vals[0])
-    y_major_tick_labels = numpy.arange(meta.min_y(), meta.max_y(), 50*int(meta.pixel_height()))
+    y_major_tick_labels = numpy.arange(meta.min_y(self._plane), meta.max_y(self._plane), meta.comp_y(self._plane))
     y_major = numpy.column_stack((y_major_tick_vals, y_major_tick_labels))
     
-    y_minor_tick_vals = numpy.arange(int(meta.height()))
-    y_minor_tick_labels = numpy.arange(meta.min_y(), meta.max_y(), 1)
+    y_minor_tick_vals = numpy.arange(meta.rows(self._plane), step=1./meta.comp_y(self._plane))
+    y_minor_tick_labels = numpy.arange(meta.min_y(self._plane), meta.max_y(self._plane), 1)
     y_minor = numpy.column_stack((y_minor_tick_vals, y_minor_tick_labels))
+
+    #Downsample the major ticks until they are 100x more than minor ticks:
+    while y_minor.shape[0] / y_major.shape[0] < 100:
+      y_major = y_major[::2,:]
+      if len(y_major) < 10:
+        break
 
     y_ticks = [y_major, y_minor]
 
@@ -193,7 +206,7 @@ class viewport(pg.GraphicsLayoutWidget):
     return self._plane
 
   def lockRatio(self, lockAR ):
-    ratio = (self._x_max_range[1] - self._x_max_range[0]) / (self._y_max_range[1] - self._y_max_range[0])
+    ratio = (self._y_max_range[1] - self._y_max_range[0]) / (self._x_max_range[1] - self._x_max_range[0]) 
     if lockAR:
       self._plot.setAspectLocked(True, ratio=ratio)
     else:

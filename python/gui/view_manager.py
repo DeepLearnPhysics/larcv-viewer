@@ -11,16 +11,18 @@ class view_manager(QtCore.QObject):
   def __init__(self):
     super(view_manager, self).__init__()
     self._nviews = 0
-    self._drawerList = []
+    self._drawerList = dict()
     self._cmapList = []
 
     self._selectedPlane = -1
 
     
+  def resetEvdDrawerList(self, plane):
+    self._drawerList = dict()
 
 
   def addEvdDrawer(self,plane):
-    self._drawerList.append(viewport(plane))
+    self._drawerList.update({ plane : viewport(plane)})
     self._nviews += 1
   
   def selectPlane(self,plane):
@@ -44,7 +46,7 @@ class view_manager(QtCore.QObject):
     self._layout.setContentsMargins(0,0,0,0)
 
     self._planeWidgets = []
-    for view in self._drawerList:
+    for plane, view in self._drawerList.iteritems():
       widget,layout = view.getWidget()
       self._planeWidgets.append(widget)
       self._layout.addWidget(widget,0)
@@ -73,12 +75,12 @@ class view_manager(QtCore.QObject):
 
 
   def connectStatusBar(self,statusBar):
-    for view in self._drawerList:
+    for plane, view in self._drawerList.iteritems():
       view.connectStatusBar(statusBar)
 
 
   def setRangeToMax(self):
-    for view in self._drawerList:
+    for plane, view in self._drawerList.iteritems():
       view.setRangeToMax()
 
   def autoRange(self,event_manager):
@@ -87,7 +89,7 @@ class view_manager(QtCore.QObject):
       view.autoRange(xRange,yRange)
 
   def lockAR(self, lockRatio):
-    for view in self._drawerList:
+    for plane, view in self._drawerList.iteritems():
       view.lockRatio(lockRatio)
 
  
