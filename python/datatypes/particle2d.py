@@ -3,29 +3,20 @@ from ROOT import larcv
 from pyqtgraph.Qt import QtGui, QtCore
 import pyqtgraph as pg
 
-class roi2d(recoBase):
+class particle2d(recoBase):
 
     """docstring for cluster"""
 
     def __init__(self):
-        super(roi2d, self).__init__()
-        self._productName = 'roi2d'
-        self._product_id = 1
+        super(particle2d, self).__init__()
+        self._product_name = 'particle'
         larcv.load_pyutil()
 
     # this is the function that actually draws the cluster.
     def drawObjects(self, view_manager, io_manager, meta):
 
 
-        event_roi2d = io_manager.get_data(self._product_id, str(self._producerName))
-
-        # print event_roi2d.ROIArray().size()
-
-        for roi in event_roi2d.ROIArray():
-            print "ROI Creation Process: {}".format(roi.CreationProcess())
-            print 
-        # return
-
+        event_particle = io_manager.get_data(self._product_name, str(self._producerName))
 
         self._drawnObjects = []
         for view in view_manager.getViewPorts():
@@ -33,15 +24,19 @@ class roi2d(recoBase):
             thisPlane = view.plane()
             self._drawnObjects.append([])
 
-            for i in xrange(event_roi2d.ROIArray().size()):
+            for i in xrange(event_particle.size()):
 
-                roi = event_roi2d.ROIArray().at(i)
-
-                if roi.BB().size() == 0:
+                particle = event_particle.at(i)
+                print particle.BoundingBox2D()
+                print particle.BoundingBox2D().size()
+                for box in particle.BoundingBox2D():
+                    print box
+                return
+                if particle.BB().size() == 0:
                     continue
 
-                _type = roi.Type()
-                bounding_box = roi.BB(thisPlane)
+                _type = particle.Type()
+                bounding_box = particle.BB(thisPlane)
                 if thisPlane == 0:
                     print "CM Left: {}".format(meta.wire_to_col(bounding_box.tl().x, thisPlane))
                     print "CM Right: {}".format(meta.wire_to_col(bounding_box.tr().x, thisPlane))
