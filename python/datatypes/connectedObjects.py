@@ -133,25 +133,27 @@ class boxCollection(QtCore.QObject):
         if self.sender() == None:
             self.highlightChange.emit()
 
-    def drawHits(self, view, cluster):
-        for i in xrange(len(cluster)):
-            pixel = cluster[i]
+    def drawHits(self, view, cluster, meta):
+        for i in xrange(cluster.as_vector().size()):
+            voxel = cluster.as_vector()[i]
+            col = meta.col(meta.position(voxel.id()).x)
+            row = meta.row(meta.position(voxel.id()).y)
             # Draws a rectangle at (x,y,xlength, ylength)
-            # print "Drawing pixel at ({}, {})".format(pixel.X(), pixel.Y())
-            r = connectedBox(pixel.X(), pixel.Y(), 1, 1) #, pixel.Width())
+            # print "Drawing voxel at ({}, {})".format(voxel.X(), voxel.Y())
+            r = connectedBox(col, row, 1, 1) #, voxel.Width())
             r.setPen(pg.mkPen(None))
             r.setBrush(pg.mkColor(self._color))
             self._listOfHits.append(r)
             view._plot.addItem(r)
 
-            # Connect the pixel's actions with the clusters functions
+            # Connect the voxel's actions with the clusters functions
             r.connectOwnerHoverEnter(self.hoverEnter)
             r.connectOwnerHoverExit(self.hoverExit)
             r.connectToggleHighlight(self.toggleHighlight)
             r.connectToolTip(self.genToolTip)
 
     def clearHits(self, view):
-        for pixel in self._listOfHits:
-            view._plot.removeItem(pixel)
+        for voxel in self._listOfHits:
+            view._plot.removeItem(voxel)
         self._listOfHits = []
         self._label = None

@@ -18,46 +18,27 @@ class particle2d(recoBase):
 
         event_particle = io_manager.get_data(self._product_name, str(self._producerName))
 
+
         self._drawnObjects = []
-        for view in view_manager.getViewPorts():
+        for plane, view in view_manager.getViewPorts().iteritems():
             # get the plane
-            thisPlane = view.plane()
+            # thisPlane = view.plane()
             self._drawnObjects.append([])
 
-            for i in xrange(event_particle.size()):
+            for particle in event_particle.as_vector():
 
-                particle = event_particle.at(i)
-                print particle.BoundingBox2D()
-                print particle.BoundingBox2D().size()
-                for box in particle.BoundingBox2D():
-                    print box
-                return
-                if particle.BB().size() == 0:
-                    continue
+                # particle = event_particle.at(i)
+                bounding_box = particle.boundingbox_2d(plane)
 
-                _type = particle.Type()
-                bounding_box = particle.BB(thisPlane)
-                if thisPlane == 0:
-                    print "CM Left: {}".format(meta.wire_to_col(bounding_box.tl().x, thisPlane))
-                    print "CM Right: {}".format(meta.wire_to_col(bounding_box.tr().x, thisPlane))
-                    print "CM Top: {}".format(meta.time_to_row(bounding_box.tl().y, thisPlane))
-                    print "CM Bottom: {}".format(meta.time_to_row(bounding_box.bl().y, thisPlane))
-                    print "Wire Left: {}".format(bounding_box.tl().x)
-                    print "Wire Right: {}".format(bounding_box.tr().x)
-                    print "Time Top: {}".format(bounding_box.tl().y)
-                    print "Time Bottom: {}".format(bounding_box.bl().y)
-
-                    print 
-
-                left = meta.wire_to_col(bounding_box.tl().x, thisPlane)
-                right = meta.wire_to_col(bounding_box.tr().x, thisPlane)
-                top = meta.time_to_row(bounding_box.tl().y, thisPlane)
-                bottom = meta.time_to_row(bounding_box.bl().y, thisPlane)
+                left = meta.wire_to_col(bounding_box.min_x(), plane)
+                right = meta.wire_to_col(bounding_box.max_x(), plane)
+                top = meta.time_to_row(bounding_box.min_y(), plane)
+                bottom = meta.time_to_row(bounding_box.max_y(), plane)
 
                 r = QtGui.QGraphicsRectItem(left, bottom, (right-left), (top - bottom))
                 r.setPen(pg.mkPen('r'))
                 r.setBrush(pg.mkColor((0,0,0,0)))
-                self._drawnObjects[thisPlane].append(r)
+                self._drawnObjects[plane].append(r)
                 view._plot.addItem(r)
 
         return

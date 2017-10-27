@@ -1,6 +1,7 @@
 from image2d import image2d
 from pixel2d import pixel2d
 from particle2d import particle2d
+from cluster2d import cluster2d
 
 # This is the class that maintains the list of drawable items.
 # If your class isn't here, it can't be drawn
@@ -17,7 +18,7 @@ class drawableItems(object):
         # items are stored as pointers to the classes (not instances)
         self._drawableClasses = collections.OrderedDict()
         self._drawableClasses.update({'Image2D': [image2d, 'image2d']})
-        self._drawableClasses.update({'Pixel2D': [pixel2d, 'pixel2d']})
+        self._drawableClasses.update({'Cluster2D': [cluster2d, 'cluster2d']})
         self._drawableClasses.update({'Particle 2D': [particle2d, 'particle']})
 
     def getListOfTitles(self):
