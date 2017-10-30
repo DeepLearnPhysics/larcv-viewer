@@ -46,6 +46,11 @@ class evd_manager_base(QtCore.QObject):
 
         self._driver.initialize()
 
+        self._driver.process_entry()
+        
+        for product in self._io_manager.product_list():
+            print product
+
         self.refresh_meta()
 
 
@@ -60,7 +65,10 @@ class evd_manager_base(QtCore.QObject):
         # _event_image2d = self._io_manager.get_data('image2d',_producer)
         
         # Look for the meta_event_tree to get the event meta out of the file:
+        print "Got to here"
         _producers = self._io_manager.producer_list('meta')
+        print _producers
+        print _producers.size()
         if '2D' in _producers:
             _producer = '2D'
         elif _producers.size() > 0:
