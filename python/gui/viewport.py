@@ -102,8 +102,8 @@ class viewport(pg.GraphicsLayoutWidget):
 
   def levelChanged(self):
     # First, get the current values of the levels:
-    lowerLevel = int(self._lowerLevel.text())
-    upperLevel = int(self._upperLevel.text())
+    lowerLevel = float(self._lowerLevel.text())
+    upperLevel = float(self._upperLevel.text())
 
     # set the levels as requested:
     levels = (lowerLevel, upperLevel)

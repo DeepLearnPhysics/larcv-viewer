@@ -68,28 +68,30 @@ class cluster3d(recoBase):
         #Get the list of cluster3d sets:
         event_cluster3d = io_manager.get_data(self._product_name, str(self._producerName))
 
-        print event_cluster3d.size()
 
         self._meta = event_cluster3d.meta()
 
-        self._id_summed_charge = dict()
+        self._id_summed_charge = []
+        self._assigned_colors = []
 
         _color_index = 0
 
         # # This section draws voxels onto the environment:
         for cluster in event_cluster3d.as_vector():
 
+            print cluster.as_vector().size()
             _this_id_summed_charge = dict()
             for voxel in cluster.as_vector():
-                if voxel.ID() ==self._meta.invalid_voxel_id():
+                if voxel.id() ==self._meta.invalid_voxel_id():
                     continue
-                if voxel.ID() in _this_id_summed_charge:
-                    _this_id_summed_charge[voxel.ID()] += voxel.Value()
+                if voxel.id() in _this_id_summed_charge:
+                    _this_id_summed_charge[voxel.id()] += voxel.value()
                 else:
-                    _this_id_summed_charge.update({voxel.ID() : voxel.Value()})
+                    _this_id_summed_charge.update({voxel.id() : voxel.value()})
 
             self._id_summed_charge.append(_this_id_summed_charge)
             self._assigned_colors.append(self._clusterColors[_color_index])
+
 
             _color_index += 1
             if _color_index >= len(self._clusterColors):
@@ -108,6 +110,7 @@ class cluster3d(recoBase):
             self._gl_voxel_mesh = None
 
         verts, faces, colors = self.buildTriangleArray(self._id_summed_charge,
+                                                       self._assigned_colors,
                                                        view_manager)
 
 
@@ -120,47 +123,45 @@ class cluster3d(recoBase):
         self._gl_voxel_mesh = mesh
         view_manager.getView().addItem(self._gl_voxel_mesh)
 
-    def buildTriangleArray(self, id_summed_charge, view_manager):
+    def buildTriangleArray(self, id_summed_charge, assigned_colors, view_manager):
         verts = None
         faces = None
         colors = None
 
 
         i = 0
-        for voxel_id in id_summed_charge:
+        for cluster, color in zip(id_summed_charge, assigned_colors):
 
-            # Don't draw this pixel if it's below the threshold:
-            if id_summed_charge[voxel_id] < view_manager.getLevels()[0]:
-                continue
+            for voxel_id in cluster:
+
+                # Don't draw this pixel if it's below the threshold:
+                if cluster[voxel_id] < view_manager.getLevels()[0]:
+                    continue
 
 
-            this_color = self.getColor(view_manager.getLookupTable(),
-                                       view_manager.getLevels(),
-                                       id_summed_charge[voxel_id])
+                if colors is None:
+                    colors = numpy.asarray([color]*12)
+                else:
+                    colors = numpy.append(colors,
+                                          numpy.asarray([color]*12),
+                                          axis=0)
 
-            if colors is None:
-                colors = numpy.asarray([this_color]*12)
-            else:
-                colors = numpy.append(colors,
-                                      numpy.asarray([this_color]*12),
-                                      axis=0)
 
-            # print "({}, {}, {})".format(_pos[0], _pos[1], _pos[2])
-            this_verts = self.makeBox(voxel_id, self._meta)
+                this_verts = self.makeBox(voxel_id, self._meta)
 
-            if faces is None:
-                faces = self._faces_template
-            else:
-                faces = numpy.append(faces, 
-                                     self._faces_template + 8*i, 
-                                     axis=0)
-            if verts is None:
-                verts = this_verts
-            else:
-                verts = numpy.append(verts, 
-                                     this_verts, axis=0)
+                if faces is None:
+                    faces = self._faces_template
+                else:
+                    faces = numpy.append(faces, 
+                                         self._faces_template + 8*i, 
+                                         axis=0)
+                if verts is None:
+                    verts = this_verts
+                else:
+                    verts = numpy.append(verts, 
+                                         this_verts, axis=0)
 
-            i += 1
+                i += 1
 
         return verts, faces, colors
 
@@ -189,21 +190,6 @@ class cluster3d(recoBase):
         return verts_box
 
 
-    def getColor(self, _lookupTable, _levels, _voxel_value ):
-        _min = _levels[0]
-        _max = _levels[1]
-
-        if _voxel_value > _max:
-            # print "Max " + str(_voxel_value)
-            return _lookupTable[-1]
-        elif _voxel_value < _min:
-            # print "Min "  + str(_voxel_value)
-            return (0,0,0,0)
-        else:
-            index = 255*(_voxel_value - _min) / (_max - _min)
-            return _lookupTable[int(index)]
-
-
 
     def clearDrawnObjects(self, view_manager):
         i_plane = 0
@@ -216,3 +202,6 @@ class cluster3d(recoBase):
 
 
         self._listOfClusters = []
+
+    def refresh(self, view_manager):
+        self.redraw(view_manager)
