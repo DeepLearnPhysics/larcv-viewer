@@ -34,6 +34,7 @@ class drawableItems(object):
 try:
     import pyqtgraph.opengl as gl
     from voxel3d import voxel3d
+    from cluster3d import cluster3d
     class drawableItems3D(object):
 
         """This class exists to enumerate the drawableItems in 3D"""
@@ -44,6 +45,7 @@ try:
             # items are stored as pointers to the classes (not instances)
             self._drawableClasses = collections.OrderedDict()
             self._drawableClasses.update({'Voxel3d': [voxel3d,"voxel3d"]})
+            self._drawableClasses.update({'Cluster3d': [cluster3d,"cluster3d"]})
 
         def getListOfTitles(self):
             return self._drawableClasses.keys()

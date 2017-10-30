@@ -7,15 +7,20 @@ except:
     print "Error, must have open gl to use this viewer."
     exit(-1)
 
-class voxel3d(recoBase):
+class cluster3d(recoBase):
 
-    """docstring for voxel3d"""
+    """docstring for cluster3d"""
 
     def __init__(self):
-        super(voxel3d, self).__init__()
-        self._product_name = 'voxel3d'
+        super(cluster3d, self).__init__()
+        self._product_name = 'cluster3d'
+
+        self._listOfClusters = []
+
         self._gl_voxel_mesh = None
-        self._id_summed_charge = dict()
+        self._id_summed_charge = []
+        self._assigned_colors = []
+
         self._meta = None
 
         self._box_template = numpy.array([[ 0 , 0, 0],
@@ -42,37 +47,58 @@ class voxel3d(recoBase):
                                             [4, 5, 7],
                                             [5, 6, 7]])
 
+        # Defining the cluster3d colors:
+        self._clusterColors = [
+            (0, 147, 147, 125),  # dark teal
+            (0, 0, 252, 125),   # bright blue
+            (156, 0, 156, 125),  # purple
+            (255, 0, 255, 125),  # pink
+            (255, 0, 0, 125),  # red
+            (175, 0, 0, 125),  # red/brown
+            (252, 127, 0, 125),  # orange
+            (102, 51, 0, 125),  # brown
+            (127, 127, 127, 125),  # dark gray
+            (210, 210, 210, 125),  # gray
+            (100, 253, 0)  # bright green
+        ]
 
     # this is the function that actually draws the cluster.
     def drawObjects(self, view_manager, io_manager, meta):
 
-        #Get the list of voxel3d sets:
-        event_voxel3d = io_manager.get_data(self._product_name, str(self._producerName))
+        #Get the list of cluster3d sets:
+        event_cluster3d = io_manager.get_data(self._product_name, str(self._producerName))
 
-        voxels = event_voxel3d.VoxelArray()
-        self._meta = event_voxel3d.Meta() 
+        print event_cluster3d.size()
 
-        # view_manager.getView().updateMeta(self._meta)
-
-
+        self._meta = event_cluster3d.meta()
 
         self._id_summed_charge = dict()
+
+        _color_index = 0
+
         # # This section draws voxels onto the environment:
-        for voxel in voxels:
-            if voxel.ID() ==self._meta.invalid_voxel_id():
-                continue
-            if voxel.ID() in self._id_summed_charge:
-                self._id_summed_charge[voxel.ID()] += voxel.Value()
-            else:
-                self._id_summed_charge.update({voxel.ID() : voxel.Value()})
+        for cluster in event_cluster3d.as_vector():
+
+            _this_id_summed_charge = dict()
+            for voxel in cluster.as_vector():
+                if voxel.ID() ==self._meta.invalid_voxel_id():
+                    continue
+                if voxel.ID() in _this_id_summed_charge:
+                    _this_id_summed_charge[voxel.ID()] += voxel.Value()
+                else:
+                    _this_id_summed_charge.update({voxel.ID() : voxel.Value()})
+
+            self._id_summed_charge.append(_this_id_summed_charge)
+            self._assigned_colors.append(self._clusterColors[_color_index])
+
+            _color_index += 1
+            if _color_index >= len(self._clusterColors):
+                _color_index = 0
+
 
         self.redraw(view_manager)
 
 
-
-
-        # self.setColors(view_manager.getLookupTable(), view_manager.getLevels())
-        # self.redraw(view_manager)
 
     def redraw(self, view_manager):
 
@@ -178,12 +204,15 @@ class voxel3d(recoBase):
             return _lookupTable[int(index)]
 
 
-    def clearDrawnObjects(self, view_manager):
-        if self._gl_voxel_mesh is not None:
-            view_manager.getView().removeItem(self._gl_voxel_mesh)
-        self._gl_voxel_mesh = None
-        self._meta = None
-        self._id_summed_charge = dict()
 
-    def refresh(self, view_manager):
-        self.redraw(view_manager)
+    def clearDrawnObjects(self, view_manager):
+        i_plane = 0
+        # erase the clusters
+        for plane in self._listOfClusters:
+            view = view_manager.getViewPorts()[i_plane]
+            i_plane += 1
+            for cluster in plane:
+                cluster.clearHits(view)
+
+
+        self._listOfClusters = []

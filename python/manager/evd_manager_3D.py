@@ -4,6 +4,7 @@ import ROOT
 from ROOT import larcv
 
 from evd_manager_base import evd_manager_base
+from event_meta import event_meta3D
 
 try:
     import pyqtgraph.opengl as gl
@@ -30,7 +31,7 @@ class evd_manager_3D(evd_manager_base):
 
         # Meta keeps track of information about number of planes, visible
         # regions, etc.:
-        self._meta = None
+        self._meta = event_meta3D()
 
 
         # Drawn classes is a list of things getting drawn, as well.
@@ -56,10 +57,19 @@ class evd_manager_3D(evd_manager_base):
         # Read in any of the image2d products if none is specified.
         # Use it's meta info to build up the meta for the viewer
 
-        _producer = self._io_manager.producer_list('voxel3d').front()
-        _event_voxel3d = self._io_manager.get_data('voxel3d', _producer)
-        
-        self._meta = _event_voxel3d.Meta()
+        _producers = self._io_manager.producer_list('meta')
+        if '2D' in _producers:
+            _producer = '2D'
+        elif _producers.size() > 0:
+            _producer = _producers[0]
+        else:
+            print "Error, no meta available for the viewer."
+            exit()
+
+        _global_meta = self._io_manager.get_data('meta',_producer)
+
+        self._meta.refresh(_global_meta)
+
 
 
     # this function is meant for the first request to draw an object or

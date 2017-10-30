@@ -3,7 +3,6 @@ class event_meta(object):
 
     def __init__(self):
         super(event_meta, self).__init__()
-        self._image_metas = dict()
     
     def n_views(self):
         return max(self._n_views, 1)
@@ -57,23 +56,6 @@ class event_meta(object):
 
 
 
-
-    # def meta(self, plane):
-    #     return self._image_metas[plane]
-
-    # def row_to_wire(self, row, plane):
-    #     return self._image_metas[plane].pos_x(row)
-
-    # def col_to_time(self, col, plane):
-    #     return self._image_metas[plane].pos_y(col)
-
-    # def wire_to_col(self, wire, plane):
-    #     return  (wire - self._image_metas[plane].tl().x) / self._image_metas[plane].pixel_width()
-
-    # def time_to_row(self, time, plane):
-    #     return  (self._image_metas[plane].tl().y - time) / self._image_metas[plane].pixel_height()
-    #     # return self._image_metas[plane].row(time)
-
     def range(self, plane):
         if plane >= 0 and plane < self._n_views:
             return ((self._x_min[plane], self._x_min[plane] ),
@@ -81,3 +63,65 @@ class event_meta(object):
         else:
             print "ERROR: plane {} not available.".format(plane)
             return ((-1, 1), (-1, 1))
+
+class event_meta3D(object):
+    def __init__(self):
+        super(event_meta3D, self).__init__()
+
+    def refresh(self, _larcv_meta):
+
+        self._x_min   = _larcv_meta.get_double('x_min')
+        self._y_min   = _larcv_meta.get_double('y_min')
+        self._z_min   = _larcv_meta.get_double('z_min')
+        self._x_max   = _larcv_meta.get_double('x_max')
+        self._y_max   = _larcv_meta.get_double('y_max')
+        self._z_max   = _larcv_meta.get_double('z_max')
+        self._y_n_pixels = _larcv_meta.get_double("y_n_pixels")
+        self._x_n_pixels = _larcv_meta.get_double("x_n_pixels")
+        self._z_n_pixels = _larcv_meta.get_double("z_n_pixels")
+
+
+    def n_voxels_x(self):
+        return self._x_n_pixels
+
+    def n_voxels_y(self):
+        return self._y_n_pixels
+
+    def n_voxels_z(self):
+        return self._y_n_pixels
+
+    def dim_x(self):
+        return self._x_max
+
+    def dim_y(self):
+        return self._y_max
+
+    def dim_z(self):
+        return self._z_max
+
+    def width(self):
+        return self.dim_x()
+
+    def height(self):
+        return self.dim_y()
+
+    def length(self):
+        return self.dim_z()
+
+    def min_y(self):
+        return self._y_min
+
+    def max_y(self):
+        return self._y_max
+
+    def min_x(self):
+        return self._x_min
+
+    def max_x(self):
+        return self._x_max
+
+    def min_z(self):
+        return self._z_min    
+
+    def max_z(self):
+        return self._z_max
