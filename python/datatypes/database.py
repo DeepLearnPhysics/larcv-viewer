@@ -60,10 +60,9 @@ class recoBase(dataBase):
         self._process = None
 
     def clearDrawnObjects(self, view_manager):
-        for view in view_manager.getViewPorts():
-            thisPlane = view.plane()
-            if len(self._drawnObjects) > thisPlane:
-                for item in self._drawnObjects[thisPlane]:
+        for plane, view in view_manager.getViewPorts().iteritems():
+            if len(self._drawnObjects) > plane:
+                for item in self._drawnObjects[plane]:
                     view._plot.removeItem(item)
 
         # clear the list:
