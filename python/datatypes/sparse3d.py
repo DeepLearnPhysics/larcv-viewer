@@ -7,13 +7,13 @@ except:
     print "Error, must have open gl to use this viewer."
     exit(-1)
 
-class voxel3d(recoBase):
+class sparse3d(recoBase):
 
-    """docstring for voxel3d"""
+    """docstring for sparse3d"""
 
     def __init__(self):
-        super(voxel3d, self).__init__()
-        self._product_name = 'voxel3d'
+        super(sparse3d, self).__init__()
+        self._product_name = 'sparse3d'
         self._gl_voxel_mesh = None
         self._id_summed_charge = dict()
         self._meta = None
@@ -46,11 +46,12 @@ class voxel3d(recoBase):
     # this is the function that actually draws the cluster.
     def drawObjects(self, view_manager, io_manager, meta):
 
-        #Get the list of voxel3d sets:
+        #Get the list of sparse3d sets:
         event_voxel3d = io_manager.get_data(self._product_name, str(self._producerName))
 
-        voxels = event_voxel3d.VoxelArray()
-        self._meta = event_voxel3d.Meta() 
+
+        voxels = event_voxel3d.as_vector()
+        self._meta = event_voxel3d.meta() 
 
         # view_manager.getView().updateMeta(self._meta)
 
@@ -59,15 +60,14 @@ class voxel3d(recoBase):
         self._id_summed_charge = dict()
         # # This section draws voxels onto the environment:
         for voxel in voxels:
-            if voxel.ID() ==self._meta.invalid_voxel_id():
+            if voxel.id() ==self._meta.invalid_voxel_id():
                 continue
-            if voxel.ID() in self._id_summed_charge:
-                self._id_summed_charge[voxel.ID()] += voxel.Value()
+            if voxel.id() in self._id_summed_charge:
+                self._id_summed_charge[voxel.id()] += voxel.value()
             else:
-                self._id_summed_charge.update({voxel.ID() : voxel.Value()})
+                self._id_summed_charge.update({voxel.id() : voxel.value()})
 
         self.redraw(view_manager)
-
 
 
 
@@ -81,6 +81,7 @@ class voxel3d(recoBase):
             view_manager.getView().removeItem(self._gl_voxel_mesh)
             self._gl_voxel_mesh = None
 
+
         verts, faces, colors = self.buildTriangleArray(self._id_summed_charge,
                                                        view_manager)
 
@@ -90,6 +91,7 @@ class voxel3d(recoBase):
                              faces=faces,
                              faceColors=colors,
                              smooth=False)
+
         # mesh.setGLOptions("additive")        
         self._gl_voxel_mesh = mesh
         view_manager.getView().addItem(self._gl_voxel_mesh)
@@ -181,6 +183,7 @@ class voxel3d(recoBase):
     def clearDrawnObjects(self, view_manager):
         if self._gl_voxel_mesh is not None:
             view_manager.getView().removeItem(self._gl_voxel_mesh)
+
         self._gl_voxel_mesh = None
         self._meta = None
         self._id_summed_charge = dict()
