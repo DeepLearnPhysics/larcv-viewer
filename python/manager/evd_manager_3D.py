@@ -58,8 +58,8 @@ class evd_manager_3D(evd_manager_base):
         # Use it's meta info to build up the meta for the viewer
 
         _producers = self._io_manager.producer_list('meta')
-        if '2D' in _producers:
-            _producer = '2D'
+        if '3D' in _producers:
+            _producer = '3D'
         elif _producers.size() > 0:
             _producer = _producers[0]
         else:

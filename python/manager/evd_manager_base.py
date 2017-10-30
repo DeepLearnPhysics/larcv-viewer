@@ -47,9 +47,7 @@ class evd_manager_base(QtCore.QObject):
         self._driver.initialize()
 
         self._driver.process_entry()
-        
-        for product in self._io_manager.product_list():
-            print product
+        # self._driver.set_id(run,subrun,event)
 
         self.refresh_meta()
 
@@ -66,8 +64,6 @@ class evd_manager_base(QtCore.QObject):
         
         # Look for the meta_event_tree to get the event meta out of the file:
         _producers = self._io_manager.producer_list('meta')
-        print _producers
-        print _producers.size()
         if '2D' in _producers:
             _producer = '2D'
         elif _producers.size() > 0:
@@ -125,21 +121,25 @@ class evd_manager_base(QtCore.QObject):
     # override the functions from manager as needed here
     def next(self):
         if self.entry() + 1 < self.n_entries():
-            self._driver.batch_process(self.entry() + 1, 1)
+            # print self._driver.event()
+            self._driver.clear_entry()            
+            self._driver.process_entry(self.entry() + 1)
             self.eventChanged.emit()
         else:
             print "On the last event, can't go to next."
 
     def prev(self):
         if self.entry != 0:
-            self._driver.batch_process(self.entry() - 1, 1)
+            self._driver.clear_entry()            
+            self._driver.process_entry(self.entry() - 1)
             self.eventChanged.emit()
         else:
             print "On the first event, can't go to previous."
 
     def go_to_entry(self, entry):
         if entry >= 0 and entry < self.n_entries():
-            self._driver.batch_process(entry, 1)
+            self._driver.clear_entry()            
+            self._driver.process_entry(entry)
             self.eventChanged.emit()
         else:
             print "Can't go to entry {}, entry is out of range.".format(entry)
