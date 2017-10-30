@@ -32,7 +32,6 @@ class cluster2d(recoBase):
     def drawObjects(self, view_manager, io_manager, meta):
 
         #Get the list of cluster2d sets:
-        print self._producerName
         event_pixel2d = io_manager.get_data(self._product_name, str(self._producerName))
         # if self._producerName in io_manager.producer_list(self._product_name):
         #     hasROI = True
@@ -48,7 +47,6 @@ class cluster2d(recoBase):
 
             # Get the cluster2d clusters for this plane:
             clusters = event_pixel2d.cluster_pixel_2d(plane)
-
 
             # extend the list of clusters
             self._listOfClusters.append([])

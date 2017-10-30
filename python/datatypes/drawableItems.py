@@ -33,7 +33,7 @@ class drawableItems(object):
 
 try:
     import pyqtgraph.opengl as gl
-    from voxel3d import voxel3d
+    from sparse3d import sparse3d
     from cluster3d import cluster3d
     class drawableItems3D(object):
 
@@ -44,7 +44,7 @@ try:
             super(drawableItems3D, self).__init__()
             # items are stored as pointers to the classes (not instances)
             self._drawableClasses = collections.OrderedDict()
-            self._drawableClasses.update({'Voxel3d': [voxel3d,"voxel3d"]})
+            self._drawableClasses.update({'Voxel3d': [sparse3d,"sparse3d"]})
             self._drawableClasses.update({'Cluster3d': [cluster3d,"cluster3d"]})
 
         def getListOfTitles(self):

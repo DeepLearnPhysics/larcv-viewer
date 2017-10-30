@@ -79,7 +79,6 @@ class cluster3d(recoBase):
         # # This section draws voxels onto the environment:
         for cluster in event_cluster3d.as_vector():
 
-            print cluster.as_vector().size()
             _this_id_summed_charge = dict()
             for voxel in cluster.as_vector():
                 if voxel.id() ==self._meta.invalid_voxel_id():
@@ -192,16 +191,13 @@ class cluster3d(recoBase):
 
 
     def clearDrawnObjects(self, view_manager):
-        i_plane = 0
-        # erase the clusters
-        for plane in self._listOfClusters:
-            view = view_manager.getViewPorts()[i_plane]
-            i_plane += 1
-            for cluster in plane:
-                cluster.clearHits(view)
-
-
-        self._listOfClusters = []
-
+        if self._gl_voxel_mesh is not None:
+            view_manager.getView().removeItem(self._gl_voxel_mesh)
+            self._gl_voxel_mesh = None
+        self._gl_voxel_mesh = None
+        self._meta = None
+        self._id_summed_charge = []
+        self._assigned_colors = []
+        
     def refresh(self, view_manager):
         self.redraw(view_manager)
