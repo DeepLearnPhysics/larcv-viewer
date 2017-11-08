@@ -38,6 +38,7 @@ class cluster2d(recoBase):
         # else:
         #     hasROI = False
 
+
         # if hasROI:    
         #     event_roi = io_manager.get_data(self._product_name, str(self._producerName))
 
@@ -46,7 +47,10 @@ class cluster2d(recoBase):
             colorIndex = 0
 
             # Get the cluster2d clusters for this plane:
-            clusters = event_pixel2d.cluster_pixel_2d(plane)
+            try:
+                clusters = event_pixel2d.cluster_pixel_2d(plane)
+            except:
+                continue
 
             # extend the list of clusters
             self._listOfClusters.append([])

@@ -169,7 +169,7 @@ class sparse3d(recoBase):
         _min = _levels[0]
         _max = _levels[1]
 
-        if _voxel_value > _max:
+        if _voxel_value >= _max:
             # print "Max " + str(_voxel_value)
             return _lookupTable[-1]
         elif _voxel_value < _min:
