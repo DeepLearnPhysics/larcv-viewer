@@ -25,7 +25,7 @@ class cluster2d(recoBase):
             (102, 51, 0, 125),  # brown
             (127, 127, 127, 125),  # dark gray
             (210, 210, 210, 125),  # gray
-            (100, 253, 0)  # bright green
+            (100, 253, 0, 125)  # bright green
         ]
 
     # this is the function that actually draws the cluster.
