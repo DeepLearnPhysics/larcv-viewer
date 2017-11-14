@@ -90,11 +90,6 @@ class recoBase3D(dataBase):
         # clear the list:
         self._drawnObjects = []
 
-    # override set producer
-    def setProducer(self, producer):
-        self._producerName = producer
-        self._process.setProducer(str(producer))
-
     def getDrawnObjects(self):
         return self._drawnObjects
 

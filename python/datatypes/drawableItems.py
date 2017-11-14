@@ -35,6 +35,7 @@ try:
     import pyqtgraph.opengl as gl
     from sparse3d import sparse3d
     from cluster3d import cluster3d
+    from particle3d import particle3d
     class drawableItems3D(object):
 
         """This class exists to enumerate the drawableItems in 3D"""
@@ -46,6 +47,7 @@ try:
             self._drawableClasses = collections.OrderedDict()
             self._drawableClasses.update({'Voxel3d': [sparse3d,"sparse3d"]})
             self._drawableClasses.update({'Cluster3d': [cluster3d,"cluster3d"]})
+            self._drawableClasses.update({'Particle3D': [particle3d,"particle"]})
 
         def getListOfTitles(self):
             return self._drawableClasses.keys()

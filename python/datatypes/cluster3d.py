@@ -1,4 +1,4 @@
-from database import recoBase
+from database import recoBase3D
 from pyqtgraph.Qt import QtGui, QtCore
 import numpy
 try:
@@ -7,7 +7,7 @@ except:
     print "Error, must have open gl to use this viewer."
     exit(-1)
 
-class cluster3d(recoBase):
+class cluster3d(recoBase3D):
 
     """docstring for cluster3d"""
 
@@ -59,7 +59,7 @@ class cluster3d(recoBase):
             (102, 51, 0, 125),  # brown
             (127, 127, 127, 125),  # dark gray
             (210, 210, 210, 125),  # gray
-            (100, 253, 0)  # bright green
+            (100, 253, 0, 125)  # bright green
         ]
 
     # this is the function that actually draws the cluster.
@@ -70,6 +70,7 @@ class cluster3d(recoBase):
 
 
         self._meta = event_cluster3d.meta()
+
 
         self._id_summed_charge = []
         self._assigned_colors = []
@@ -96,6 +97,10 @@ class cluster3d(recoBase):
             if _color_index >= len(self._clusterColors):
                 _color_index = 0
 
+
+        # The last cluster is the 'leftover' depositions
+        # Force it's color to white everytime:
+        self._assigned_colors[-1] = (255, 255, 255, 125)
 
         self.redraw(view_manager)
 
@@ -127,7 +132,11 @@ class cluster3d(recoBase):
         faces = None
         colors = None
 
+        n_voxels = 0
+        for cluster in id_summed_charge:
+            n_voxels += len(cluster)
 
+        
         i = 0
         for cluster, color in zip(id_summed_charge, assigned_colors):
 
@@ -136,7 +145,6 @@ class cluster3d(recoBase):
                 # Don't draw this pixel if it's below the threshold:
                 if cluster[voxel_id] < view_manager.getLevels()[0]:
                     continue
-
 
                 if colors is None:
                     colors = numpy.asarray([color]*12)
