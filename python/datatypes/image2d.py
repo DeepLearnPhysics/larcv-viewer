@@ -20,7 +20,7 @@ class image2d(recoBase):
         for image2d_plane in image2d_data.image2d_array():
             thisView = view_manager.getViewPorts()[image2d_plane.meta().id()]
 
-            image_as_ndarray = larcv.as_ndarray(image2d_plane)
+            image_as_ndarray = larcv.as_ndarray(image2d_plane).T
             thisView._item.setImage(image_as_ndarray)
 
         return
