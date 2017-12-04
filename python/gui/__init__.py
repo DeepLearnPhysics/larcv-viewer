@@ -1,4 +1,5 @@
-from .gui import gui, view_manager
+from .gui import gui
+from .view_manager import view_manager
 from .evdgui import evdgui
     
 from .viewport import viewport

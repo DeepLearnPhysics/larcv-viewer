@@ -36,7 +36,7 @@ def main():
     app = QtGui.QApplication(sys.argv)
 
     if args.config is None:
-      print "No config supplied, using default configuration file."
+      print("No config supplied, using default configuration file.")
       args.config = os.environ["LARCV_VIEWER_TOPDIR"] + "/config/default.cfg"
 
 

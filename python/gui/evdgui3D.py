@@ -3,11 +3,11 @@ try:
 except:
     print("ERROR: Must have opengl for this display.")
 
-from gui3D import gui3D
+from .gui3D import gui3D
 from pyqtgraph.Qt import QtGui, QtCore
 from manager import evd_manager_3D
 
-from recobox import recoBox
+from .recobox import recoBox
 
 # Inherit the basic gui to extend it
 # override the gui to give the lariat display special features:

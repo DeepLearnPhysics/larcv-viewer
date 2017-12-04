@@ -1,5 +1,5 @@
 # Import the class that manages the view windows
-from viewport3D import viewport3D
+from .viewport3D import viewport3D
 from pyqtgraph.Qt import QtCore, QtGui
 import pyqtgraph as pg
 
@@ -104,4 +104,4 @@ class view_manager3D(QtCore.QObject):
         self._view.update()
 
     def restoreDefaults(self):
-        print "restoreDefaults called but not implemented"
+        print("restoreDefaults called but not implemented")

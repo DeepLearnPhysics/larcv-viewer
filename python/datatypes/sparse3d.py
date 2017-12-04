@@ -1,10 +1,10 @@
-from database import recoBase
+from .database import recoBase
 from pyqtgraph.Qt import QtGui, QtCore
 import numpy
 try:
     import pyqtgraph.opengl as gl
 except:
-    print "Error, must have open gl to use this viewer."
+    print("Error, must have open gl to use this viewer.")
     exit(-1)
 
 class sparse3d(recoBase):

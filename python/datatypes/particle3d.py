@@ -1,13 +1,9 @@
-from database import recoBase3D
+from .database import recoBase3D
 from ROOT import larcv
 from pyqtgraph.Qt import QtGui, QtCore
 import numpy
 import pyqtgraph as pg
-try:
-    import pyqtgraph.opengl as gl
-except:
-    print "Error, must have open gl to use this viewer."
-    exit(-1)
+import pyqtgraph.opengl as gl
 
 class particle3d(recoBase3D):
 

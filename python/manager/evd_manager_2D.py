@@ -2,7 +2,7 @@ from pyqtgraph.Qt import QtCore
 import datatypes
 import ROOT
 
-from evd_manager_base import evd_manager_base
+from .evd_manager_base import evd_manager_base
 
 class evd_manager_2D(evd_manager_base):
 

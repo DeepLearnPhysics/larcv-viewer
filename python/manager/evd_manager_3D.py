@@ -1,15 +1,15 @@
 from pyqtgraph.Qt import QtCore
-import datatypes
+from datatypes import drawableItems3D
 import ROOT
 from ROOT import larcv
 
-from evd_manager_base import evd_manager_base
-from event_meta import event_meta3D
+from .evd_manager_base import evd_manager_base
+from .event_meta import event_meta3D
 
 try:
     import pyqtgraph.opengl as gl
 except:
-    print "Need opengl for the 3D viewer! Exiting ..."
+    print("Need opengl for the 3D viewer! Exiting ...")
     exit()
 
 class evd_manager_3D(evd_manager_base):
@@ -19,7 +19,7 @@ class evd_manager_3D(evd_manager_base):
 
     def __init__(self, config, _file=None):
         super(evd_manager_3D, self).__init__(config, _file)
-        self._drawableItems = datatypes.drawableItems3D()
+        self._drawableItems = drawableItems3D()
                 
 
     def init_manager(self, _file):
@@ -63,7 +63,7 @@ class evd_manager_3D(evd_manager_base):
         elif _producers.size() > 0:
             _producer = _producers[0]
         else:
-            print "Error, no meta available for the viewer."
+            print("Error, no meta available for the viewer.")
             exit()
 
         _global_meta = self._io_manager.get_data('meta',_producer)

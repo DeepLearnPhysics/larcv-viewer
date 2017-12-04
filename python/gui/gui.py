@@ -8,7 +8,7 @@ import pyqtgraph as pg
 import numpy as np
 
 # import evdmanager
-from view_manager import view_manager
+from .view_manager import view_manager
 
 class gui(QtGui.QWidget):
 
@@ -95,7 +95,7 @@ class gui(QtGui.QWidget):
 
   # this function helps pass the entry of the line edit item to the event control
   def goToEventWorker(self):
-    print "called goToEventWorker"
+    print("called goToEventWorker")
     try:
       event = int(self._fileEntry.text())
     except:

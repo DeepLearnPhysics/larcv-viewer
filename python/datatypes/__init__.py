@@ -1,5 +1,5 @@
-from database import dataBase, recoBase
-from drawableItems import drawableItems
+from .database import dataBase, recoBase
+from .drawableItems import drawableItems
 # from hit import hit
 # from cluster import cluster
 # from shower import shower
@@ -10,13 +10,10 @@ from drawableItems import drawableItems
 # from vertex import vertex
 # from mctruth import mctruth
 # from spacepoint import spacepoint
-try:
-    import pyqtgraph.opengl as gl
-    from drawableItems import drawableItems3D
+import pyqtgraph.opengl as gl
+from .drawableItems import drawableItems3D
 #     from track import track3D
 #     from shower import shower3D
 #     from mctrack import mctrack3D
 #     from spacepoint import spacepoint3D
 #     from opflash import opflash3D
-except:
-    pass

@@ -7,7 +7,7 @@ from pyqtgraph.Qt import QtGui, QtCore
 import pyqtgraph as pg
 import numpy as np
 
-from view_manager3D import view_manager3D
+from .view_manager3D import view_manager3D
 
 # Wrap the spin box class to allow key signals to pass to the gui
 
@@ -172,7 +172,7 @@ class gui3D(QtGui.QWidget):
     try:
       event = int(self._entryBox.text())
     except:
-      print "Error, must enter an integer"
+      print("Error, must enter an integer")
       self._entryBox.setText(str(self._event_manager.entry()))
       return
     self._event_manager.go_to_entry(event)

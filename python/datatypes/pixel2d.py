@@ -1,6 +1,6 @@
-from database import recoBase
+from .database import recoBase
 from pyqtgraph.Qt import QtGui, QtCore
-from connectedObjects import connectedBox, connectedCircle, boxCollection
+from .connectedObjects import connectedBox, connectedCircle, boxCollection
 
 
 class pixel2d(recoBase):

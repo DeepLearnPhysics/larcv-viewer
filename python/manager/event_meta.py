@@ -61,7 +61,7 @@ class event_meta(object):
             return ((self._x_min[plane], self._x_min[plane] ),
                     (self._x_min[plane], self._x_min[plane]))
         else:
-            print "ERROR: plane {} not available.".format(plane)
+            print("ERROR: plane {} not available.".format(plane))
             return ((-1, 1), (-1, 1))
 
 class event_meta3D(object):

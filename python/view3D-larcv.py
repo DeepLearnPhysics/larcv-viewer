@@ -14,7 +14,7 @@ try:
     import pyqtgraph.opengl as gl
 
 except:
-    print "Must have opengl to use the 3D viewer, exiting."
+    print("Must have opengl to use the 3D viewer, exiting.")
     exit()
 
 from gui import evdgui3D
@@ -40,7 +40,7 @@ def main():
     app = QtGui.QApplication(sys.argv)
 
     if args.config is None:
-      print "No config supplied, using default configuration file."
+      print("No config supplied, using default configuration file.")
       args.config = os.environ["LARCV_VIEWER_TOPDIR"] + "/config/default3D.cfg"
 
 

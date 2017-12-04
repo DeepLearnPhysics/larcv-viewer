@@ -1,4 +1,4 @@
-from database import recoBase
+from .database import recoBase
 from ROOT import larcv
 
 class image2d(recoBase):

@@ -2,7 +2,7 @@ import ROOT
 from ROOT import larcv
 from pyqtgraph.Qt import QtCore
 
-from event_meta import event_meta
+from .event_meta import event_meta
 
 class evd_manager_base(QtCore.QObject):
 
@@ -69,7 +69,7 @@ class evd_manager_base(QtCore.QObject):
         elif _producers.size() > 0:
             _producer = _producers[0]
         else:
-            print "Error, no meta available for the viewer."
+            print("Error, no meta available for the viewer.")
             exit()
 
         _global_meta = self._io_manager.get_data('meta',_producer)
@@ -126,7 +126,7 @@ class evd_manager_base(QtCore.QObject):
             self._driver.process_entry(self.entry() + 1)
             self.eventChanged.emit()
         else:
-            print "On the last event, can't go to next."
+            print("On the last event, can't go to next.")
 
     def prev(self):
         if self.entry != 0:
@@ -134,7 +134,7 @@ class evd_manager_base(QtCore.QObject):
             self._driver.process_entry(self.entry() - 1)
             self.eventChanged.emit()
         else:
-            print "On the first event, can't go to previous."
+            print("On the first event, can't go to previous.")
 
     def go_to_entry(self, entry):
         if entry >= 0 and entry < self.n_entries():
@@ -142,7 +142,7 @@ class evd_manager_base(QtCore.QObject):
             self._driver.process_entry(entry)
             self.eventChanged.emit()
         else:
-            print "Can't go to entry {}, entry is out of range.".format(entry)
+            print("Can't go to entry {}, entry is out of range.".format(entry))
 
     def range(self, plane):
         # To get the range, we ask for the image meta and use it:

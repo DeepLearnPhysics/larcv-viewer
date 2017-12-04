@@ -1,7 +1,7 @@
 from gui import gui
 from pyqtgraph.Qt import QtGui, QtCore
 
-from recobox import recoBox
+from .recobox import recoBox
 
 
 # Inherit the basic gui to extend it
