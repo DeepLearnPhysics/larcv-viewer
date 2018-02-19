@@ -42,9 +42,9 @@ class viewport(pg.GraphicsLayoutWidget):
                    'mode' : 'rgb'}
 
     self._colorMap = {'ticks': [(0, (30, 30, 255, 255)),
-                       (0.33333, (0, 255, 255, 255)), 
-                       (0.66666, (255,255,100,255)), 
-                       (1, (255, 0, 0, 255))], 
+                       (0.33333, (0, 255, 255, 255)),
+                       (0.66666, (255,255,100,255)),
+                       (1, (255, 0, 0, 255))],
                      'mode': 'rgb'}
 
     self._activeMap = self._bwMap
@@ -135,7 +135,7 @@ class viewport(pg.GraphicsLayoutWidget):
     else:
       message += ", Y: "
       message += "{0:.1f}".format(self.q.y())
-    
+
 
     # print message
     # if self.q.x() > 0 and self.q.x() < self._geometry.wRange(self._plane):
@@ -161,6 +161,7 @@ class viewport(pg.GraphicsLayoutWidget):
 
     x_minor_tick_vals = numpy.arange(meta.cols(self._plane), step=1./meta.comp_x(self._plane))
     x_minor_tick_labels = numpy.arange(meta.min_x(self._plane), meta.max_x(self._plane), 1)
+
     x_minor = numpy.column_stack((x_minor_tick_vals, x_minor_tick_labels))
 
     #Downsample the major ticks until they are 100x more than minor ticks:
@@ -176,7 +177,7 @@ class viewport(pg.GraphicsLayoutWidget):
     self._y_max_range = (y_major_tick_vals[-1], y_major_tick_vals[0])
     y_major_tick_labels = numpy.arange(meta.min_y(self._plane), meta.max_y(self._plane), meta.comp_y(self._plane))
     y_major = numpy.column_stack((y_major_tick_vals, y_major_tick_labels))
-    
+
     y_minor_tick_vals = numpy.arange(meta.rows(self._plane), step=1./meta.comp_y(self._plane))
     y_minor_tick_labels = numpy.arange(meta.min_y(self._plane), meta.max_y(self._plane), 1)
     y_minor = numpy.column_stack((y_minor_tick_vals, y_minor_tick_labels))
@@ -206,7 +207,7 @@ class viewport(pg.GraphicsLayoutWidget):
     return self._plane
 
   def lockRatio(self, lockAR ):
-    ratio = (self._y_max_range[1] - self._y_max_range[0]) / (self._x_max_range[1] - self._x_max_range[0]) 
+    ratio = (self._y_max_range[1] - self._y_max_range[0]) / (self._x_max_range[1] - self._x_max_range[0])
     if lockAR:
       self._plot.setAspectLocked(True, ratio=ratio)
     else:
