@@ -35,6 +35,8 @@ class viewport3D(gl.GLViewWidget):
         _len_y = meta.max_y() - meta.min_y()
         _len_z = meta.max_z() - meta.min_z()
     
+
+
         self.setCenter((0,0,0))
     
         for _item in self._background_items:
@@ -50,16 +52,21 @@ class viewport3D(gl.GLViewWidget):
     
         # Add a set of grids along x, y, z:
         self._xy_grid = gl.GLGridItem()
-        self._xy_grid.setSize(x=_len_x, y=_len_y, z=0.0)
+        # Set the grid size to the number of voxels in x and y:
+        self._xy_grid.setSize(x=meta.n_voxels_x(), y=meta.n_voxels_y(), z=0.0)
+        # Scale the grid to the correct size:
+        self._xy_grid.scale(x=meta.size_voxel_x(), y=meta.size_voxel_y(), z=1.0)
         self._xy_grid.translate(_len_x*0.5, _len_y * 0.5, 0.0)
-        # self._xy_grid.setSize(x=_len_x, y=_len_y, z=0.0)
-        # self._x_grid.setSize(x=self._meta.MaxX(), y=self._meta.MaxY(), z=self._meta.MaxZ())
+
         self._yz_grid = gl.GLGridItem()
-        self._yz_grid.setSize(x=_len_z, y=_len_y)
+        self._yz_grid.setSize(x=meta.n_voxels_z(), y=meta.n_voxels_y())
+        self._yz_grid.scale(x=meta.size_voxel_z(), y=meta.size_voxel_y(), z=1.0)
         self._yz_grid.rotate(-90, 0, 1, 0)
         self._yz_grid.translate(0, _len_y*0.5, _len_z*0.5)
+
         self._xz_grid = gl.GLGridItem()
-        self._xz_grid.setSize(x=_len_x, y=_len_z)
+        self._xz_grid.setSize(x=meta.n_voxels_x(), y=meta.n_voxels_z())
+        self._xz_grid.scale(x=meta.size_voxel_x(), y=meta.size_voxel_z(), z=1.0)
         self._xz_grid.rotate(90, 1, 0, 0)
         self._xz_grid.translate(_len_x*0.5, 0, _len_z*0.5)
     
