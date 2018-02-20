@@ -21,11 +21,12 @@ class image2d(recoBase):
             thisView = view_manager.getViewPorts()[image2d_plane.meta().id()]
 
             image_as_ndarray = larcv.as_ndarray(image2d_plane).T
-            thisView._item.setImage(image_as_ndarray)
+
+            thisView.drawPlane(image_as_ndarray)
 
         return
 
     def clearDrawnObjects(self, view_manager):
 
-        for _, view in view_manager.getViewPorts().iteritems():
+        for index, view in view_manager.getViewPorts().iteritems():
             view.drawBlank()

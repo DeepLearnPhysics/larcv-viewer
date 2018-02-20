@@ -30,10 +30,10 @@ class particle2d(recoBase):
                 # particle = event_particle.at(i)
                 bounding_box = particle.boundingbox_2d(plane)
 
-                left = meta.wire_to_col(bounding_box.min_x(), plane)
-                right = meta.wire_to_col(bounding_box.max_x(), plane)
-                top = meta.time_to_row(bounding_box.min_y(), plane)
-                bottom = meta.time_to_row(bounding_box.max_y(), plane)
+                left = meta.wire_to_col(bounding_box.min_y(), plane)
+                right = meta.wire_to_col(bounding_box.max_y(), plane)
+                top = meta.time_to_row(bounding_box.min_x(), plane)
+                bottom = meta.time_to_row(bounding_box.max_x(), plane)
 
                 #r = QtGui.QGraphicsRectItem(bottom, left, (top - bottom), (right-left))
                 r = QtGui.QGraphicsRectItem(left, bottom, (right-left), (top - bottom))

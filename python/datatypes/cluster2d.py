@@ -38,10 +38,8 @@ class cluster2d(recoBase):
         # else:
         #     hasROI = False
 
-
-        # if hasROI:    
+        # if hasROI:
         #     event_roi = io_manager.get_data(self._product_name, str(self._producerName))
-
 
         for plane, view in view_manager.getViewPorts().iteritems():
             colorIndex = 0
@@ -55,7 +53,7 @@ class cluster2d(recoBase):
             # extend the list of clusters
             self._listOfClusters.append([])
 
-            for i in xrange(clusters.as_vector().size()):
+            for i in xrange(clusters.as_vector().size() -1):
                 cluster = clusters.as_vector()[i]
                 # Now make the cluster
                 cluster_box_coll = boxCollection()
