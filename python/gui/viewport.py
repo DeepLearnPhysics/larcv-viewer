@@ -156,7 +156,11 @@ class viewport(pg.GraphicsLayoutWidget):
     # Minor ticks are 1
     x_major_tick_vals   = numpy.arange(meta.cols(self._plane), step=1)
     self._x_max_range = (x_major_tick_vals[-1], x_major_tick_vals[0])
-    x_major_tick_labels = numpy.arange(meta.min_x(self._plane), meta.max_x(self._plane), meta.comp_x(self._plane))
+    x_major_tick_labels = numpy.around(
+      numpy.arange(meta.min_x(self._plane),
+                   meta.max_x(self._plane),
+                   meta.comp_x(self._plane)))
+
     x_major = numpy.column_stack((x_major_tick_vals, x_major_tick_labels))
 
     x_minor_tick_vals = numpy.arange(meta.cols(self._plane), step=1./meta.comp_x(self._plane))
@@ -175,11 +179,16 @@ class viewport(pg.GraphicsLayoutWidget):
 
     y_major_tick_vals   = numpy.arange(meta.rows(self._plane), step=1)
     self._y_max_range = (y_major_tick_vals[-1], y_major_tick_vals[0])
-    y_major_tick_labels = numpy.arange(meta.min_y(self._plane), meta.max_y(self._plane), meta.comp_y(self._plane))
+    y_major_tick_labels = numpy.around(
+      numpy.arange(meta.min_y(self._plane),
+                   meta.max_y(self._plane),
+                   meta.comp_y(self._plane)))
+
     y_major = numpy.column_stack((y_major_tick_vals, y_major_tick_labels))
 
     y_minor_tick_vals = numpy.arange(meta.rows(self._plane), step=1./meta.comp_y(self._plane))
-    y_minor_tick_labels = numpy.arange(meta.min_y(self._plane), meta.max_y(self._plane), 1)
+    y_minor_tick_labels = numpy.arange(meta.min_y(self._plane),
+                                       meta.max_y(self._plane), 1)
     y_minor = numpy.column_stack((y_minor_tick_vals, y_minor_tick_labels))
 
     #Downsample the major ticks until they are 100x more than minor ticks:
@@ -187,6 +196,7 @@ class viewport(pg.GraphicsLayoutWidget):
       y_major = y_major[::2,:]
       if len(y_major) < 10:
         break
+
 
     y_ticks = [y_major, y_minor]
 
