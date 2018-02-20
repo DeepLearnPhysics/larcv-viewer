@@ -25,14 +25,7 @@ class image2d(recoBase):
 
         return
 
-    # def clearDrawnObjects(self, view_manager):
-    #     i_plane = 0
-    #     # erase the clusters
-    #     for plane in self._listOfClusters:
-    #         view = view_manager.getViewPorts()[i_plane]
-    #         i_plane += 1
-    #         for cluster in plane:
-    #             cluster.clearHits(view)
+    def clearDrawnObjects(self, view_manager):
 
-
-    #     self._listOfClusters = []
+        for _, view in view_manager.getViewPorts().iteritems():
+            view.drawBlank()
