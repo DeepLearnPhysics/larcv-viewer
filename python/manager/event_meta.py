@@ -3,7 +3,7 @@ class event_meta(object):
 
     def __init__(self):
         super(event_meta, self).__init__()
-    
+
     def n_views(self):
         return max(self._n_views, 1)
 
@@ -25,7 +25,7 @@ class event_meta(object):
 
     def comp_x(self, plane):
         return self.width(plane) / self.cols(plane)
-    
+
     def rows(self, plane):
         return self._y_n_pixels[plane]
 
@@ -81,6 +81,15 @@ class event_meta3D(object):
         self._z_n_pixels = _larcv_meta.get_double("z_n_pixels")
 
 
+    def size_voxel_x(self):
+        return (self._x_max - self._x_min) / self._x_n_pixels
+
+    def size_voxel_y(self):
+        return (self._y_max - self._y_min) / self._y_n_pixels
+
+    def size_voxel_z(self):
+        return (self._z_max - self._z_min) / self._z_n_pixels
+
     def n_voxels_x(self):
         return self._x_n_pixels
 
@@ -88,16 +97,16 @@ class event_meta3D(object):
         return self._y_n_pixels
 
     def n_voxels_z(self):
-        return self._y_n_pixels
+        return self._z_n_pixels
 
     def dim_x(self):
-        return self._x_max
+        return self._x_max - self._x_min
 
     def dim_y(self):
-        return self._y_max
+        return self._y_max - self._y_min
 
     def dim_z(self):
-        return self._z_max
+        return self._z_max - self._z_min
 
     def width(self):
         return self.dim_x()
@@ -121,7 +130,7 @@ class event_meta3D(object):
         return self._x_max
 
     def min_z(self):
-        return self._z_min    
+        return self._z_min
 
     def max_z(self):
         return self._z_max
