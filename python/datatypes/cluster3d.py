@@ -57,8 +57,6 @@ class cluster3d(recoBase3D):
             (175, 0, 0, 125),  # red/brown
             (252, 127, 0, 125),  # orange
             (102, 51, 0, 125),  # brown
-            (127, 127, 127, 125),  # dark gray
-            (210, 210, 210, 125),  # gray
             (100, 253, 0, 125)  # bright green
         ]
 
@@ -118,12 +116,12 @@ class cluster3d(recoBase3D):
                                                        view_manager)
 
 
-        #make a mesh item: 
+        #make a mesh item:
         mesh = gl.GLMeshItem(vertexes=verts,
                              faces=faces,
                              faceColors=colors,
                              smooth=False)
-        # mesh.setGLOptions("additive")        
+        # mesh.setGLOptions("additive")
         self._gl_voxel_mesh = mesh
         view_manager.getView().addItem(self._gl_voxel_mesh)
 
@@ -136,7 +134,7 @@ class cluster3d(recoBase3D):
         for cluster in id_summed_charge:
             n_voxels += len(cluster)
 
-        
+
         i = 0
         for cluster, color in zip(id_summed_charge, assigned_colors):
 
@@ -159,13 +157,13 @@ class cluster3d(recoBase3D):
                 if faces is None:
                     faces = self._faces_template
                 else:
-                    faces = numpy.append(faces, 
-                                         self._faces_template + 8*i, 
+                    faces = numpy.append(faces,
+                                         self._faces_template + 8*i,
                                          axis=0)
                 if verts is None:
                     verts = this_verts
                 else:
-                    verts = numpy.append(verts, 
+                    verts = numpy.append(verts,
                                          this_verts, axis=0)
 
                 i += 1
@@ -183,7 +181,7 @@ class cluster3d(recoBase3D):
         verts_box[:,0] -= 0.5*meta.size_voxel_x()
         verts_box[:,1] -= 0.5*meta.size_voxel_y()
         verts_box[:,2] -= 0.5*meta.size_voxel_z()
-        
+
         #Move the points to the right coordinate in this space
 
         verts_box[:,0] += meta.pos_x(voxel_id) - meta.min_x()
@@ -206,6 +204,6 @@ class cluster3d(recoBase3D):
         self._meta = None
         self._id_summed_charge = []
         self._assigned_colors = []
-        
+
     def refresh(self, view_manager):
         self.redraw(view_manager)
