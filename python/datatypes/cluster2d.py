@@ -53,7 +53,7 @@ class cluster2d(recoBase):
             # extend the list of clusters
             self._listOfClusters.append([])
 
-            for i in xrange(clusters.as_vector().size() -1):
+            for i in xrange(max(1,clusters.as_vector().size() -1)):
                 cluster = clusters.as_vector()[i]
                 # Now make the cluster
                 cluster_box_coll = boxCollection()
