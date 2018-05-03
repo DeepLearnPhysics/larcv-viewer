@@ -76,10 +76,9 @@ class event_meta3D(object):
         self._x_max   = _larcv_meta.get_double('x_max')
         self._y_max   = _larcv_meta.get_double('y_max')
         self._z_max   = _larcv_meta.get_double('z_max')
-        self._y_n_pixels = _larcv_meta.get_double("y_n_pixels")
         self._x_n_pixels = _larcv_meta.get_double("x_n_pixels")
+        self._y_n_pixels = _larcv_meta.get_double("y_n_pixels")
         self._z_n_pixels = _larcv_meta.get_double("z_n_pixels")
-
 
     def size_voxel_x(self):
         return (self._x_max - self._x_min) / self._x_n_pixels
