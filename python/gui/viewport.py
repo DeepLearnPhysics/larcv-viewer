@@ -166,6 +166,12 @@ class viewport(pg.GraphicsLayoutWidget):
     x_minor_tick_vals = numpy.arange(meta.cols(self._plane), step=1./meta.comp_x(self._plane))
     x_minor_tick_labels = numpy.arange(meta.min_x(self._plane), meta.max_x(self._plane), 1)
 
+    if len(x_minor_tick_vals) != len(x_minor_tick_labels):
+      target = min(len(x_minor_tick_labels), len(x_minor_tick_vals))
+      x_minor_tick_labels = x_minor_tick_labels[0:target]
+      x_minor_tick_vals = x_minor_tick_vals[0:target]
+
+
     x_minor = numpy.column_stack((x_minor_tick_vals, x_minor_tick_labels))
 
     #Downsample the major ticks until they are 100x more than minor ticks:
