@@ -134,7 +134,7 @@ class boxCollection(QtCore.QObject):
             self.highlightChange.emit()
 
     def drawHits(self, view, cluster, meta):
-        for i in xrange(cluster.as_vector().size()):
+        for i in range(cluster.as_vector().size()):
             voxel = cluster.as_vector()[i]
             col = meta.col(meta.position(voxel.id()).x)
             row = meta.row(meta.position(voxel.id()).y)

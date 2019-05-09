@@ -41,7 +41,7 @@ class sparse2d(recoBase):
         # if hasROI:
         #     event_roi = io_manager.get_data(self._product_name, str(self._producerName))
 
-        for plane, view in view_manager.getViewPorts().iteritems():
+        for plane, view in view_manager.getViewPorts().items():
             colorIndex = 0
 
             # Get the sparse2d clusters for this plane:

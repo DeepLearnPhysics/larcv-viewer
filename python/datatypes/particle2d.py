@@ -20,7 +20,7 @@ class particle2d(recoBase):
 
 
         self._drawnObjects = []
-        for plane, view in view_manager.getViewPorts().iteritems():
+        for plane, view in view_manager.getViewPorts().items():
             # get the plane
             # thisPlane = view.plane()
             self._drawnObjects.append([])
