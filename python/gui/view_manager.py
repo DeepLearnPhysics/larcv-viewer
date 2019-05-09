@@ -46,7 +46,7 @@ class view_manager(QtCore.QObject):
     self._layout.setContentsMargins(0,0,0,0)
 
     self._planeWidgets = []
-    for plane, view in self._drawerList.iteritems():
+    for plane, view in self._drawerList.items():
       widget,layout = view.getWidget()
       self._planeWidgets.append(widget)
       self._layout.addWidget(widget,0)
@@ -75,12 +75,12 @@ class view_manager(QtCore.QObject):
 
 
   def connectStatusBar(self,statusBar):
-    for plane, view in self._drawerList.iteritems():
+    for plane, view in self._drawerList.items():
       view.connectStatusBar(statusBar)
 
 
   def setRangeToMax(self):
-    for plane, view in self._drawerList.iteritems():
+    for plane, view in self._drawerList.items():
       view.setRangeToMax()
 
   def autoRange(self,event_manager):
@@ -89,7 +89,7 @@ class view_manager(QtCore.QObject):
       view.autoRange(xRange,yRange)
 
   def lockAR(self, lockRatio):
-    for plane, view in self._drawerList.iteritems():
+    for plane, view in self._drawerList.items():
       view.lockRatio(lockRatio)
 
  

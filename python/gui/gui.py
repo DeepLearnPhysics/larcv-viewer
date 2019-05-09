@@ -31,7 +31,7 @@ class gui(QtGui.QWidget):
 
   def metaChanged(self, meta):
     self._event_manager.refresh_meta()
-    for plane, view in self._view_manager.getViewPorts().iteritems():
+    for plane, view in self._view_manager.getViewPorts().items():
       view.updateRange(meta)
 
   def update(self):
@@ -138,7 +138,7 @@ class gui(QtGui.QWidget):
   def viewSelectWorker(self):
 
     i = 0
-    for i in xrange(self._event_manager.n_views()):
+    for i in range(self._event_manager.n_views()):
       if self.sender() == self._viewButtonArray[i]:
         self._view_manager.selectPlane(i)
         self._view_manager.refreshDrawListWidget()
@@ -161,10 +161,10 @@ class gui(QtGui.QWidget):
 
   def falseColorWorker(self):
     if self._falseColorSelection.isChecked():
-      for plane, view in self._view_manager.getViewPorts().iteritems():
+      for plane, view in self._view_manager.getViewPorts().items():
         view.falseColor(True)
     else:
-      for plane, view in self._view_manager.getViewPorts().iteritems():
+      for plane, view in self._view_manager.getViewPorts().items():
         view.falseColor(False)
 
   def restoreDefaultsWorker(self):
@@ -211,7 +211,7 @@ class gui(QtGui.QWidget):
 
     i = 0
     self._viewButtonArray = []
-    for plane in xrange(self._event_manager.n_views()):
+    for plane in range(self._event_manager.n_views()):
       button = QtGui.QRadioButton("Plane" + str(i))
       i += 1
       self._viewButtonGroup.addButton(button)
