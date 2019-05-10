@@ -1,6 +1,7 @@
 from .database import recoBase
-from ROOT import larcv
-
+from larcv import larcv
+import copy
+# import numpy
 class image2d(recoBase):
 
     """docstring for cluster"""
@@ -8,20 +9,23 @@ class image2d(recoBase):
     def __init__(self):
         super(image2d, self).__init__()
         self._product_name = 'image2d'
-        larcv.load_pyutil()
 
     # this is the function that actually draws the cluster.
     def drawObjects(self, view_manager, io_manager, meta):
 
 
-        image2d_data = io_manager.get_data(self._product_name, str(self._producerName))
+        image2d_array = io_manager.get_data(self._product_name, str(self._producerName))
+        image2d_array = larcv.EventImage2D.to_image2d(image2d_array)
 
+ 
+        self._data_arr = []
 
-        for image2d_plane in image2d_data.image2d_array():
+        for image2d_plane in image2d_array.image2d_array():
             thisView = view_manager.getViewPorts()[image2d_plane.meta().id()]
-            image_as_ndarray = larcv.as_ndarray(image2d_plane).T
+            self._data_arr.append(copy.copy(larcv.as_ndarray(image2d_plane).T))
 
-            thisView.drawPlane(image_as_ndarray)
+
+            thisView.drawPlane(self._data_arr[-1])
 
         return
 

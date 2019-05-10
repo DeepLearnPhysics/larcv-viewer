@@ -2,6 +2,7 @@ from .database import recoBase
 from pyqtgraph.Qt import QtGui, QtCore
 from .connectedObjects import connectedBox, boxCollection
 
+from larcv import larcv
 
 class sparse2d(recoBase):
 
@@ -32,7 +33,8 @@ class sparse2d(recoBase):
     def drawObjects(self, view_manager, io_manager, meta):
 
         #Get the list of sparse2d sets:
-        event_pixel2d = io_manager.get_data(self._product_name, str(self._producerName))
+        sparse_2d_set = io_manager.get_data(self._product_name, str(self._producerName))
+        sparse_2d_set = larcv.EventSparseTensor2D.to_sparse_tensor(sparse_2d_set)
         # if self._producerName in io_manager.producer_list(self._product_name):
         #     hasROI = True
         # else:
@@ -41,14 +43,18 @@ class sparse2d(recoBase):
         # if hasROI:
         #     event_roi = io_manager.get_data(self._product_name, str(self._producerName))
 
+        print(sparse_2d_set)
+        print(view_manager.getViewPorts().items())
+
         for plane, view in view_manager.getViewPorts().items():
             colorIndex = 0
 
             # Get the sparse2d clusters for this plane:
-            try:
-                voxelset = event_pixel2d.sparse_tensor_2d(plane)
-            except:
-                continue
+            # try:
+            voxelset = sparse_2d_set.sparse_tensor(plane)
+            # except:
+            #     print("Failed to gather the voxel set for plane ", plane)
+            #     continue
 
             # extend the list of clusters
             self._listOfClusters.append([])

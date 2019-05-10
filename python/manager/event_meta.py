@@ -7,15 +7,26 @@ class event_meta(object):
     def n_views(self):
         return max(self._n_views, 1)
 
-    def refresh(self, _larcv_meta):
+    def refresh(self, meta_vec):
 
-        self._n_views = _larcv_meta.get_int("n_planes")
-        self._x_min   = _larcv_meta.get_darray('x_min')
-        self._y_min   = _larcv_meta.get_darray('y_min')
-        self._x_max   = _larcv_meta.get_darray('x_max')
-        self._y_max   = _larcv_meta.get_darray('y_max')
-        self._y_n_pixels = _larcv_meta.get_darray("y_n_pixels")
-        self._x_n_pixels = _larcv_meta.get_darray("x_n_pixels")
+
+        self._n_views = meta_vec.size()
+
+        self._x_min = []
+        self._y_min = []
+        self._x_max = []
+        self._y_max = []
+        self._y_n_pixels = []
+        self._x_n_pixels = []
+        x_ind = 0
+        y_ind = 1
+        for meta in meta_vec:
+            self._x_min.append(meta.origin(0))
+            self._y_min.append(meta.origin(1))
+            self._x_max.append(meta.image_size(0) + meta.origin(0))
+            self._y_max.append(meta.image_size(1) + meta.origin(1))
+            self._y_n_pixels.append(meta.number_of_voxels(0))
+            self._x_n_pixels.append(meta.number_of_voxels(1))
 
     def cols(self, plane):
         return self._x_n_pixels[plane]

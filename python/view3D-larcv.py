@@ -1,7 +1,4 @@
 #!/usr/bin/env python
-import ROOT
-ROOT.PyConfig.IgnoreCommandLineOptions = True
-ROOT.gROOT.ProcessLine("gErrorIgnoreLevel = kError;")
 
 
 # from gui import evdgui

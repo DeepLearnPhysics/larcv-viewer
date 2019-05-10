@@ -107,7 +107,6 @@ class viewport(pg.GraphicsLayoutWidget):
 
     # set the levels as requested:
     levels = (lowerLevel, upperLevel)
-
     # last, update the levels in the image:
     self._item.setLevels(levels)
 

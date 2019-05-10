@@ -1,7 +1,5 @@
 from pyqtgraph.Qt import QtCore
 from datatypes import drawableItems3D
-import ROOT
-from ROOT import larcv
 
 from .evd_manager_base import evd_manager_base
 from .event_meta import event_meta3D
@@ -25,7 +23,7 @@ class evd_manager_3D(evd_manager_base):
     def init_manager(self, _file):
 
         # For the larcv manager, using the IOManager to get at the data
-        self._driver =  larcv.ProcessDriver('ProcessDriver')
+        self._driver =  larcv.processor.ProcessDriver('ProcessDriver')
         self._driver.configure(self._config)
         self._io_manager = self._driver.io()
 
@@ -39,7 +37,7 @@ class evd_manager_3D(evd_manager_base):
 
 
         if _file != None:
-            flist=ROOT.std.vector('std::string')()
+            flist=larcv.dataformat.VectorOfString()
             if type(_file) is list:
                 for f in _file: flist.push_back(f)
                 self._driver.override_input_file(flist)

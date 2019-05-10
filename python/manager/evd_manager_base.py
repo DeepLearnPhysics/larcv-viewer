@@ -1,8 +1,8 @@
-import ROOT
-from ROOT import larcv
 from pyqtgraph.Qt import QtCore
 
 from .event_meta import event_meta
+
+from larcv import larcv
 
 class evd_manager_base(QtCore.QObject):
 
@@ -10,7 +10,6 @@ class evd_manager_base(QtCore.QObject):
     drawFreshRequested = QtCore.pyqtSignal()
     metaRefreshed = QtCore.pyqtSignal(event_meta)
 
-    """docstring for lariat_manager"""
 
     def __init__(self, config, _file=None):
         super(evd_manager_base, self).__init__()
@@ -20,7 +19,7 @@ class evd_manager_base(QtCore.QObject):
 
     def init_manager(self, _file):
         # For the larcv manager, using the IOManager to get at the data
-        self._driver =  larcv.ProcessDriver('ProcessDriver')
+        self._driver =  larcv.ProcessDriver("ProcessDriver")
         self._driver.configure(self._config)
         self._io_manager = self._driver.io()
 
@@ -36,7 +35,7 @@ class evd_manager_base(QtCore.QObject):
 
 
         if _file != None:
-            flist=ROOT.std.vector('std::string')()
+            flist=larcv.VectorOfString()
             if type(_file) is list:
                 for f in _file: flist.push_back(f)
                 self._driver.override_input_file(flist)
@@ -62,20 +61,41 @@ class evd_manager_base(QtCore.QObject):
         #     _producer = _producers[-1]
         # _event_image2d = self._io_manager.get_data('image2d',_producer)
         
-        # Look for the meta_event_tree to get the event meta out of the file:
-        _producers = self._io_manager.producer_list('meta')
-        if '2D' in _producers:
-            _producer = '2D'
-        elif _producers.size() > 0:
-            _producer = _producers[0]
-        else:
-            print("Error, no meta available for the viewer.")
-            exit()
 
-        _global_meta = self._io_manager.get_data('meta',_producer)
+        # Meta information can come from either image2d, sparse2d or cluster2d
+        # It's pull from image2d by default, from the first producer.
+        # it goes to sparse2d next, then cluster2d
 
+        product = "image2d"
+        producers = self._io_manager.producer_list(product)
+        if producers.size() == 0:
+            product = "sparse2d"
+            producers = self._io_manager.producer_list(product)
+        if producers.size() == 0:
+            product = "cluster2d"
+            producers = self._io_manager.producer_list(product)
+        
+        if producers.size() == 0:
+            raise Exception("No Meta avialable to define viewer boundaries")
 
-        self._meta.refresh(_global_meta)
+        producer = producers.front()
+
+        print("Pulling meta from {} by {}".format(product, producer))
+
+        meta_vec = larcv.VectorOfImageMeta2D()
+
+        data = self._io_manager.get_data(product, producer)
+        if product == "image2d":
+            data = larcv.EventImage2D.to_image2d(data)
+        if product == "sparse2d":
+            data = larcv.EventSparseTensor2D.to_sparse_tensor(data)            
+        if product == "cluster2d":
+            data = larcv.EventSparseCluster2D.to_sparse_cluster(data)
+
+        for data_obj in data.as_vector():
+            meta_vec.push_back(data_obj.meta())
+
+        self._meta.refresh(meta_vec)
 
     def meta(self):
         return self._meta

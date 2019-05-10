@@ -2,6 +2,7 @@ from .database import recoBase
 from pyqtgraph.Qt import QtGui, QtCore
 from .connectedObjects import connectedBox, boxCollection
 
+from larcv import larcv
 
 class cluster2d(recoBase):
 
@@ -32,7 +33,8 @@ class cluster2d(recoBase):
     def drawObjects(self, view_manager, io_manager, meta):
 
         #Get the list of cluster2d sets:
-        event_pixel2d = io_manager.get_data(self._product_name, str(self._producerName))
+        event_sparse_cluster = io_manager.get_data(self._product_name, str(self._producerName))
+        event_sparse_cluster = larcv.EventSparseCluster2D.to_sparse_cluster(event_sparse_cluster)
         # if self._producerName in io_manager.producer_list(self._product_name):
         #     hasROI = True
         # else:
@@ -42,13 +44,14 @@ class cluster2d(recoBase):
         #     event_roi = io_manager.get_data(self._product_name, str(self._producerName))
 
         for plane, view in view_manager.getViewPorts().items():
+            print("plane ", plane)
             colorIndex = 0
 
             # Get the cluster2d clusters for this plane:
-            try:
-                clusters = event_pixel2d.cluster_pixel_2d(plane)
-            except:
-                continue
+            # try:
+            clusters = event_sparse_cluster.sparse_cluster(plane)
+            # except:
+                # continue
 
             # extend the list of clusters
             self._listOfClusters.append([])

@@ -1,5 +1,4 @@
 from .database import recoBase3D
-from ROOT import larcv
 from pyqtgraph.Qt import QtGui, QtCore
 import numpy
 import pyqtgraph as pg

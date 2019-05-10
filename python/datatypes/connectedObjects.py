@@ -136,8 +136,9 @@ class boxCollection(QtCore.QObject):
     def drawHits(self, view, cluster, meta):
         for i in range(cluster.as_vector().size()):
             voxel = cluster.as_vector()[i]
-            col = meta.col(meta.position(voxel.id()).x)
-            row = meta.row(meta.position(voxel.id()).y)
+            # Figure out the row and column from the id:
+            col = meta.coordinate(voxel.id(),0)
+            row = meta.coordinate(voxel.id(),1)
             # Draws a rectangle at (x,y,xlength, ylength)
             # print "Drawing voxel at ({}, {})".format(voxel.X(), voxel.Y())
             r = connectedBox(col, row, 1, 1) #, voxel.Width())
