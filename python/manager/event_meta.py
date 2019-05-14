@@ -79,17 +79,23 @@ class event_meta3D(object):
     def __init__(self):
         super(event_meta3D, self).__init__()
 
-    def refresh(self, _larcv_meta):
+    def refresh(self, meta):
 
-        self._x_min   = _larcv_meta.get_double('x_min')
-        self._y_min   = _larcv_meta.get_double('y_min')
-        self._z_min   = _larcv_meta.get_double('z_min')
-        self._x_max   = _larcv_meta.get_double('x_max')
-        self._y_max   = _larcv_meta.get_double('y_max')
-        self._z_max   = _larcv_meta.get_double('z_max')
-        self._x_n_pixels = _larcv_meta.get_double("x_n_pixels")
-        self._y_n_pixels = _larcv_meta.get_double("y_n_pixels")
-        self._z_n_pixels = _larcv_meta.get_double("z_n_pixels")
+
+        x_ind = 0
+        y_ind = 1
+        z_ind = 2
+        self._x_min = meta.origin(x_ind)
+        self._y_min = meta.origin(y_ind)
+        self._z_min = meta.origin(z_ind)
+        self._x_max = meta.image_size(x_ind) + meta.origin(x_ind)
+        self._y_max = meta.image_size(y_ind) + meta.origin(y_ind)
+        self._z_max = meta.image_size(z_ind) + meta.origin(z_ind)
+        self._y_n_pixels = meta.number_of_voxels(x_ind)
+        self._x_n_pixels = meta.number_of_voxels(y_ind)
+        self._z_n_pixels = meta.number_of_voxels(z_ind)
+
+
 
     def size_voxel_x(self):
         return (self._x_max - self._x_min) / self._x_n_pixels

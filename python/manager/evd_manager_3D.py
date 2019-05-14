@@ -1,6 +1,8 @@
 from pyqtgraph.Qt import QtCore
 from datatypes import drawableItems3D
 
+from larcv import larcv 
+
 from .evd_manager_base import evd_manager_base
 from .event_meta import event_meta3D
 
@@ -23,7 +25,7 @@ class evd_manager_3D(evd_manager_base):
     def init_manager(self, _file):
 
         # For the larcv manager, using the IOManager to get at the data
-        self._driver =  larcv.processor.ProcessDriver('ProcessDriver')
+        self._driver =  larcv.ProcessDriver('ProcessDriver')
         self._driver.configure(self._config)
         self._io_manager = self._driver.io()
 
@@ -37,7 +39,7 @@ class evd_manager_3D(evd_manager_base):
 
 
         if _file != None:
-            flist=larcv.dataformat.VectorOfString()
+            flist=larcv.VectorOfString()
             if type(_file) is list:
                 for f in _file: flist.push_back(f)
                 self._driver.override_input_file(flist)
@@ -55,18 +57,31 @@ class evd_manager_3D(evd_manager_base):
         # Read in any of the image2d products if none is specified.
         # Use it's meta info to build up the meta for the viewer
 
-        _producers = self._io_manager.producer_list('meta')
-        if '3D' in _producers:
-            _producer = '3D'
-        elif _producers.size() > 0:
-            _producer = _producers[0]
-        else:
-            print("Error, no meta available for the viewer.")
-            exit()
 
-        _global_meta = self._io_manager.get_data('meta',_producer)
+        product = "sparse3d"
+        producers = self._io_manager.producer_list(product)
+        if producers.size() == 0:
+            product = "cluster3d"
+            producers = self._io_manager.producer_list(product)
+        
+        if producers.size() == 0:
+            raise Exception("No Meta avialable to define viewer boundaries")
 
-        self._meta.refresh(_global_meta)
+        producer = producers.front()
+
+        print("Pulling meta from {} by {}".format(product, producer))
+
+
+        data = self._io_manager.get_data(product, producer)
+        if product == "sparse3d":
+            data = larcv.EventSparseTensor3D.to_sparse_tensor(data)            
+            meta = data.as_vector().front().meta()
+        if product == "cluster3d":
+            data = larcv.EventSparseCluster3D.to_sparse_cluster(data)
+            meta = data.as_vector().front().meta()
+
+        self._meta.refresh(meta)
+
 
 
 
