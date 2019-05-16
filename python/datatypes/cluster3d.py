@@ -3,6 +3,8 @@ from pyqtgraph.Qt import QtGui, QtCore
 import numpy
 import pyqtgraph.opengl as gl
 
+from larcv import larcv
+
 class cluster3d(recoBase3D):
 
     """docstring for cluster3d"""
@@ -59,11 +61,14 @@ class cluster3d(recoBase3D):
     # this is the function that actually draws the cluster.
     def drawObjects(self, view_manager, io_manager, meta):
 
-        #Get the list of cluster3d sets:
+
+        #Get the list of sparse3d sets:
         event_cluster3d = io_manager.get_data(self._product_name, str(self._producerName))
+        event_cluster3d = larcv.EventSparseTensor3D.to_sparse_tensor(event_cluster3d)
 
+        voxels = event_cluster3d.as_vector().front().as_vector()
+        self._meta = event_cluster3d.as_vector().front().meta() 
 
-        self._meta = event_cluster3d.meta()
 
 
         self._id_summed_charge = []
@@ -71,12 +76,17 @@ class cluster3d(recoBase3D):
 
         _color_index = 0
 
+        print(event_cluster3d.size())
+        print(event_cluster3d.as_vector().front().size())
+
+        exit()
+
         # # This section draws voxels onto the environment:
-        for cluster in event_cluster3d.as_vector():
+        for cluster in event_cluster3d.as_vector().front().as_vector():
 
             _this_id_summed_charge = dict()
             for voxel in cluster.as_vector():
-                if voxel.id() ==self._meta.invalid_voxel_id():
+                if voxel.id() >= self._meta.total_voxels():
                     continue
                 if voxel.id() in _this_id_summed_charge:
                     _this_id_summed_charge[voxel.id()] += voxel.value()
@@ -91,6 +101,7 @@ class cluster3d(recoBase3D):
             if _color_index >= len(self._clusterColors):
                 _color_index = 0
 
+        print(self._assigned_colors)
 
         # The last cluster is the 'leftover' depositions
         # Force it's color to white everytime:

@@ -69,7 +69,6 @@ class evd_manager_3D(evd_manager_base):
 
         producer = producers.front()
 
-        print("Pulling meta from {} by {}".format(product, producer))
 
 
         data = self._io_manager.get_data(product, producer)

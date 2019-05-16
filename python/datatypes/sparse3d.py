@@ -7,6 +7,8 @@ except:
     print("Error, must have open gl to use this viewer.")
     exit(-1)
 
+from larcv import larcv
+
 class sparse3d(recoBase):
 
     """docstring for sparse3d"""
@@ -48,10 +50,10 @@ class sparse3d(recoBase):
 
         #Get the list of sparse3d sets:
         event_voxel3d = io_manager.get_data(self._product_name, str(self._producerName))
+        event_voxel3d = larcv.EventSparseTensor3D.to_sparse_tensor(event_voxel3d)
 
-
-        voxels = event_voxel3d.as_vector()
-        self._meta = event_voxel3d.meta() 
+        voxels = event_voxel3d.as_vector().front().as_vector()
+        self._meta = event_voxel3d.as_vector().front().meta() 
 
         # view_manager.getView().updateMeta(self._meta)
 
@@ -60,13 +62,13 @@ class sparse3d(recoBase):
         self._id_summed_charge = dict()
         # # This section draws voxels onto the environment:
         for voxel in voxels:
-            if voxel.id() ==self._meta.invalid_voxel_id():
+
+            if voxel.id() >= self._meta.total_voxels():
                 continue
             if voxel.id() in self._id_summed_charge:
                 self._id_summed_charge[voxel.id()] += voxel.value()
             else:
                 self._id_summed_charge.update({voxel.id() : voxel.value()})
-
         self.redraw(view_manager)
 
 
@@ -84,7 +86,6 @@ class sparse3d(recoBase):
 
         verts, faces, colors = self.buildTriangleArray(self._id_summed_charge,
                                                        view_manager)
-
 
         #make a mesh item: 
         mesh = gl.GLMeshItem(vertexes=verts,
@@ -104,7 +105,6 @@ class sparse3d(recoBase):
 
         i = 0
         for voxel_id in id_summed_charge:
-
             # Don't draw this pixel if it's below the threshold:
             if id_summed_charge[voxel_id] < view_manager.getLevels()[0]:
                 continue
@@ -143,20 +143,20 @@ class sparse3d(recoBase):
     def makeBox(self, voxel_id, meta):
         verts_box = numpy.copy(self._box_template)
         #Scale all the points of the box to the right voxel size:
-        verts_box[:,0] *= meta.size_voxel_x()
-        verts_box[:,1] *= meta.size_voxel_y()
-        verts_box[:,2] *= meta.size_voxel_z()
+        verts_box[:,0] *= meta.voxel_dimensions(0)
+        verts_box[:,1] *= meta.voxel_dimensions(1)
+        verts_box[:,2] *= meta.voxel_dimensions(2)
+
 
         #Shift the points to put the center of the cube at (0,0,0)
-        verts_box[:,0] -= 0.5*meta.size_voxel_x()
-        verts_box[:,1] -= 0.5*meta.size_voxel_y()
-        verts_box[:,2] -= 0.5*meta.size_voxel_z()
+        verts_box[:,0] -= 0.5*meta.voxel_dimensions(0)
+        verts_box[:,1] -= 0.5*meta.voxel_dimensions(1)
+        verts_box[:,2] -= 0.5*meta.voxel_dimensions(2)
         
         #Move the points to the right coordinate in this space
-
-        verts_box[:,0] += meta.pos_x(voxel_id) - meta.min_x()
-        verts_box[:,1] += meta.pos_y(voxel_id) - meta.min_y()
-        verts_box[:,2] += meta.pos_z(voxel_id) - meta.min_z()
+        verts_box[:,0] += meta.position(voxel_id, 0) - meta.origin(0)
+        verts_box[:,1] += meta.position(voxel_id, 1) - meta.origin(1)
+        verts_box[:,2] += meta.position(voxel_id, 2) - meta.origin(2)
 
 
         # color_arr = numpy.ndarray((12, 4))
