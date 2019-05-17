@@ -58,13 +58,13 @@ class cluster3d(recoBase3D):
             (100, 253, 0, 125)  # bright green
         ]
 
+
     # this is the function that actually draws the cluster.
     def drawObjects(self, view_manager, io_manager, meta):
 
-
         #Get the list of sparse3d sets:
         event_cluster3d = io_manager.get_data(self._product_name, str(self._producerName))
-        event_cluster3d = larcv.EventSparseTensor3D.to_sparse_tensor(event_cluster3d)
+        event_cluster3d = larcv.EventSparseCluster3D.to_sparse_cluster(event_cluster3d)
 
         voxels = event_cluster3d.as_vector().front().as_vector()
         self._meta = event_cluster3d.as_vector().front().meta() 
@@ -76,10 +76,6 @@ class cluster3d(recoBase3D):
 
         _color_index = 0
 
-        print(event_cluster3d.size())
-        print(event_cluster3d.as_vector().front().size())
-
-        exit()
 
         # # This section draws voxels onto the environment:
         for cluster in event_cluster3d.as_vector().front().as_vector():
@@ -101,7 +97,6 @@ class cluster3d(recoBase3D):
             if _color_index >= len(self._clusterColors):
                 _color_index = 0
 
-        print(self._assigned_colors)
 
         # The last cluster is the 'leftover' depositions
         # Force it's color to white everytime:
@@ -133,13 +128,17 @@ class cluster3d(recoBase3D):
         view_manager.getView().addItem(self._gl_voxel_mesh)
 
     def buildTriangleArray(self, id_summed_charge, assigned_colors, view_manager):
-        verts = None
-        faces = None
-        colors = None
+
 
         n_voxels = 0
         for cluster in id_summed_charge:
             n_voxels += len(cluster)
+
+        # # # Allocate enough memory for all 3 numpy arrays upfront:
+
+        verts = numpy.zeros((n_voxels*8,3))
+        faces = numpy.zeros((n_voxels*12,3), dtype=numpy.int)
+        colors = numpy.zeros((n_voxels*12,4), dtype=numpy.int)
 
 
         i = 0
@@ -151,49 +150,37 @@ class cluster3d(recoBase3D):
                 if cluster[voxel_id] < view_manager.getLevels()[0]:
                     continue
 
-                if colors is None:
-                    colors = numpy.asarray([color]*12)
-                else:
-                    colors = numpy.append(colors,
-                                          numpy.asarray([color]*12),
-                                          axis=0)
-
-
+                colors[12*i: 12*(i+1)] = color
+                faces[12*i:12*(i+1)] = self._faces_template + 8*i
                 this_verts = self.makeBox(voxel_id, self._meta)
-
-                if faces is None:
-                    faces = self._faces_template
-                else:
-                    faces = numpy.append(faces,
-                                         self._faces_template + 8*i,
-                                         axis=0)
-                if verts is None:
-                    verts = this_verts
-                else:
-                    verts = numpy.append(verts,
-                                         this_verts, axis=0)
+                verts[8*i:8*(i+1)] = this_verts
 
                 i += 1
+
+        colors = colors[0:i*12]
+        faces  = faces[0:i*12]
+        verts  = verts[0:i*8]
+
 
         return verts, faces, colors
 
     def makeBox(self, voxel_id, meta):
         verts_box = numpy.copy(self._box_template)
         #Scale all the points of the box to the right voxel size:
-        verts_box[:,0] *= meta.size_voxel_x()
-        verts_box[:,1] *= meta.size_voxel_y()
-        verts_box[:,2] *= meta.size_voxel_z()
+        verts_box[:,0] *= meta.voxel_dimensions(0)
+        verts_box[:,1] *= meta.voxel_dimensions(1)
+        verts_box[:,2] *= meta.voxel_dimensions(2)
+
 
         #Shift the points to put the center of the cube at (0,0,0)
-        verts_box[:,0] -= 0.5*meta.size_voxel_x()
-        verts_box[:,1] -= 0.5*meta.size_voxel_y()
-        verts_box[:,2] -= 0.5*meta.size_voxel_z()
-
+        verts_box[:,0] -= 0.5*meta.voxel_dimensions(0)
+        verts_box[:,1] -= 0.5*meta.voxel_dimensions(1)
+        verts_box[:,2] -= 0.5*meta.voxel_dimensions(2)
+        
         #Move the points to the right coordinate in this space
-
-        verts_box[:,0] += meta.pos_x(voxel_id) - meta.min_x()
-        verts_box[:,1] += meta.pos_y(voxel_id) - meta.min_y()
-        verts_box[:,2] += meta.pos_z(voxel_id) - meta.min_z()
+        verts_box[:,0] += meta.position(voxel_id, 0) - meta.origin(0)
+        verts_box[:,1] += meta.position(voxel_id, 1) - meta.origin(1)
+        verts_box[:,2] += meta.position(voxel_id, 2) - meta.origin(2)
 
 
         # color_arr = numpy.ndarray((12, 4))

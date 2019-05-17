@@ -98,10 +98,14 @@ class sparse3d(recoBase):
         view_manager.getView().addItem(self._gl_voxel_mesh)
 
     def buildTriangleArray(self, id_summed_charge, view_manager):
-        verts = None
-        faces = None
-        colors = None
 
+
+        n_voxels = len(id_summed_charge)
+        # # # Allocate enough memory for all 3 numpy arrays upfront:
+
+        verts = numpy.zeros((n_voxels*8,3))
+        faces = numpy.zeros((n_voxels*12,3), dtype=numpy.int)
+        colors = numpy.zeros((n_voxels*12,4))
 
         i = 0
         for voxel_id in id_summed_charge:
@@ -114,29 +118,20 @@ class sparse3d(recoBase):
                                        view_manager.getLevels(),
                                        id_summed_charge[voxel_id])
 
-            if colors is None:
-                colors = numpy.asarray([this_color]*12)
-            else:
-                colors = numpy.append(colors,
-                                      numpy.asarray([this_color]*12),
-                                      axis=0)
 
-            # print "({}, {}, {})".format(_pos[0], _pos[1], _pos[2])
+            colors[12*i: 12*(i+1)] = this_color
+
             this_verts = self.makeBox(voxel_id, self._meta)
+            faces[12*i:12*(i+1)] = self._faces_template + 8*i
+            verts[8*i:8*(i+1)] = this_verts
 
-            if faces is None:
-                faces = self._faces_template
-            else:
-                faces = numpy.append(faces, 
-                                     self._faces_template + 8*i, 
-                                     axis=0)
-            if verts is None:
-                verts = this_verts
-            else:
-                verts = numpy.append(verts, 
-                                     this_verts, axis=0)
 
             i += 1
+
+        colors = colors[0:i*12]
+        faces  = faces[0:i*12]
+        verts  = verts[0:i*8]
+
 
         return verts, faces, colors
 
