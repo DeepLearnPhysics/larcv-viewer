@@ -1,5 +1,6 @@
 from .database import recoBase
 from pyqtgraph.Qt import QtGui, QtCore
+import pyqtgraph, numpy
 from .connectedObjects import connectedBox, boxCollection
 
 from larcv import larcv
@@ -43,47 +44,34 @@ class sparse2d(recoBase):
         # if hasROI:
         #     event_roi = io_manager.get_data(self._product_name, str(self._producerName))
 
-        print(sparse_2d_set)
-        print(view_manager.getViewPorts().items())
-
         for plane, view in view_manager.getViewPorts().items():
+            self._drawnObjects.append([])
+
             colorIndex = 0
 
             # Get the sparse2d clusters for this plane:
             # try:
             voxelset = sparse_2d_set.sparse_tensor(plane)
-            # except:
-            #     print("Failed to gather the voxel set for plane ", plane)
-            #     continue
+            meta = voxelset.meta()
 
-            # extend the list of clusters
-            self._listOfClusters.append([])
+            indexes = numpy.copy(larcv.as_ndarray_sizet(voxelset.indexes()))
+            values  = numpy.copy(larcv.as_ndarray_float(voxelset.values()))
 
-                # Now make the cluster
-            cluster_box_coll = boxCollection()
-            cluster_box_coll.setColor(self._clusterColors[colorIndex])
-            cluster_box_coll.setPlane(plane)
+            # Reject all out-of-bounds indexes:
+            in_bounds = indexes < meta.total_voxels()
+            oob = indexes >= meta.total_voxels()
+            indexes = indexes[in_bounds]
+            values  = values[in_bounds]
 
-            # Keep track of the cluster for drawing management
-            self._listOfClusters[plane].append(cluster_box_coll)
+            dims = [meta.number_of_voxels(0), meta.number_of_voxels(1) ]
 
-            # draw the hits in this cluster:
-            cluster_box_coll.drawHits(view, voxelset, voxelset.meta())
+            y, x = numpy.unravel_index(indexes, dims)
 
 
+            this_item = pyqtgraph.ScatterPlotItem()
 
-            colorIndex += 1
-            if colorIndex >= len(self._clusterColors):
-                colorIndex = 0
+            this_item.setData(x, y, size=1, pxMode=False, symbol='s', pen=None)
 
-    def clearDrawnObjects(self, view_manager):
-        i_plane = 0
-        # erase the clusters
-        for plane in self._listOfClusters:
-            view = view_manager.getViewPorts()[i_plane]
-            i_plane += 1
-            for cluster in plane:
-                cluster.clearHits(view)
+            view._plot.addItem(this_item)
+            self._drawnObjects[plane].append(this_item)
 
-
-        self._listOfClusters = []

@@ -83,6 +83,7 @@ class cluster3d(recoBase3D):
             _this_id_summed_charge = dict()
             for voxel in cluster.as_vector():
                 if voxel.id() >= self._meta.total_voxels():
+                    print("continuing")
                     continue
                 if voxel.id() in _this_id_summed_charge:
                     _this_id_summed_charge[voxel.id()] += voxel.value()
