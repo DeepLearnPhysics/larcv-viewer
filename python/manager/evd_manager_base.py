@@ -80,7 +80,6 @@ class evd_manager_base(QtCore.QObject):
 
         producer = producers.front()
 
-        print("Pulling meta from {} by {}".format(product, producer))
 
         meta_vec = larcv.VectorOfImageMeta2D()
 
