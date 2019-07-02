@@ -2,6 +2,7 @@ from .database import recoBase
 from pyqtgraph.Qt import QtGui, QtCore
 import pyqtgraph, numpy
 from .connectedObjects import connectedBox, boxCollection
+from matplotlib  import cm, colors
 
 from larcv import larcv
 
@@ -49,6 +50,19 @@ class sparse2d(recoBase):
 
             colorIndex = 0
 
+            active_map = view._activeMap
+            cols = []
+            vals = []
+            for val, rgba in active_map['ticks']:
+                cols.append(numpy.asarray(rgba) / 255.)
+                vals.append(val)
+
+            cmap = pyqtgraph.ColorMap(vals, cols)
+
+            # n = len(uids); 
+            # colors = cmap(range(n), bytes = True);
+
+
             # Get the sparse2d clusters for this plane:
             # try:
             voxelset = sparse_2d_set.sparse_tensor(plane)
@@ -66,6 +80,12 @@ class sparse2d(recoBase):
             dims = [meta.number_of_voxels(0), meta.number_of_voxels(1) ]
 
             y, x = numpy.unravel_index(indexes, dims)
+
+            y = y.astype(float) + 0.5
+            x = x.astype(float) + 0.5
+
+            # colors = cmap.map(values, mode='float')
+
 
 
             this_item = pyqtgraph.ScatterPlotItem()
