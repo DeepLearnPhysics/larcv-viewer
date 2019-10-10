@@ -20,11 +20,12 @@ class image2d(recoBase):
  
         self._data_arr = []
 
-        for image2d_plane in image2d_array.image2d_array():
-            thisView = view_manager.getViewPorts()[image2d_plane.meta().id()]
+        for i, image2d_plane in enumerate(image2d_array.image2d_array()):
+            try:
+                thisView = view_manager.getViewPorts()[image2d_plane.meta().id()]
+            except:
+                thisView = view_manager.getViewPorts()[i]
             self._data_arr.append(copy.copy(larcv.as_ndarray(image2d_plane).T))
-            
-
 
             thisView.drawPlane(self._data_arr[-1])
 

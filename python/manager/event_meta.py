@@ -28,6 +28,12 @@ class event_meta(object):
             self._y_n_pixels.append(meta.number_of_voxels(0))
             self._x_n_pixels.append(meta.number_of_voxels(1))
 
+        for i in range(self._n_views):
+            if self._x_min[i] == self._x_max[i]:
+                self._x_max[i] = self._x_min[i] + self._x_n_pixels[i]
+            if self._y_min[i] == self._y_max[i]:
+                self._y_max[i] = self._y_min[i] + self._y_n_pixels[i]
+
     def cols(self, plane):
         return self._x_n_pixels[plane]
 

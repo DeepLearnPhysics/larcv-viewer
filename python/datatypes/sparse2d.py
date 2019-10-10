@@ -66,10 +66,18 @@ class sparse2d(recoBase):
             # Get the sparse2d clusters for this plane:
             # try:
             voxelset = sparse_2d_set.sparse_tensor(plane)
+
+            # Voxelset doesn't manager memory for just indexes or just values
+            # Therefore, we keep a reference to these.
+            # If we don't, the memory underneath for the std::vectors will
+            # be freed and anything might end up there.  This will corrupt the 
+            # numpy arrays below since they share the memory.
+            cpp_indexes = voxelset.indexes()
+            cpp_values = voxelset.values()
             meta = voxelset.meta()
 
-            indexes = numpy.copy(larcv.as_ndarray_sizet(voxelset.indexes()))
-            values  = numpy.copy(larcv.as_ndarray_float(voxelset.values()))
+            indexes = larcv.as_ndarray_sizet(cpp_indexes)
+            values  = larcv.as_ndarray_float(cpp_values)
 
             # Reject all out-of-bounds indexes:
             in_bounds = indexes < meta.total_voxels()
@@ -78,14 +86,12 @@ class sparse2d(recoBase):
             values  = values[in_bounds]
 
             dims = [meta.number_of_voxels(0), meta.number_of_voxels(1) ]
-
             y, x = numpy.unravel_index(indexes, dims)
 
             y = y.astype(float) + 0.5
             x = x.astype(float) + 0.5
 
             # colors = cmap.map(values, mode='float')
-
 
 
             this_item = pyqtgraph.ScatterPlotItem()

@@ -38,7 +38,7 @@ class viewport(pg.GraphicsLayoutWidget):
     # Define some color collections:
 
     self._bwMap = {'ticks': [(0, (0,0,0,255)),
-                             (1, (255, 255, 255))],
+                             (1, (255, 255, 255, 255))],
                    'mode' : 'rgb'}
 
     self._colorMap = {'ticks': [(0, (30, 30, 255, 255)),
@@ -155,6 +155,7 @@ class viewport(pg.GraphicsLayoutWidget):
     # Minor ticks are 1
     x_major_tick_vals   = numpy.arange(meta.cols(self._plane), step=1)
     self._x_max_range = (x_major_tick_vals[-1], x_major_tick_vals[0])
+
     x_major_tick_labels = numpy.around(
       numpy.arange(meta.min_x(self._plane),
                    meta.max_x(self._plane),
