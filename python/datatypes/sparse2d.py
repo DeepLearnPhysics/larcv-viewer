@@ -86,7 +86,7 @@ class sparse2d(recoBase):
             values  = values[in_bounds]
 
             dims = [meta.number_of_voxels(0), meta.number_of_voxels(1) ]
-            y, x = numpy.unravel_index(indexes, dims)
+            x, y = numpy.unravel_index(indexes, dims)
 
             y = y.astype(float) + 0.5
             x = x.astype(float) + 0.5

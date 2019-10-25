@@ -137,8 +137,8 @@ class boxCollection(QtCore.QObject):
         for i in range(cluster.as_vector().size()):
             voxel = cluster.as_vector()[i]
             # Figure out the row and column from the id:
-            row = meta.coordinate(voxel.id(),0)
-            col = meta.coordinate(voxel.id(),1)
+            col = meta.coordinate(voxel.id(),0)
+            row = meta.coordinate(voxel.id(),1)
             # Draws a rectangle at (x,y,xlength, ylength)
             # print "Drawing voxel at ({}, {})".format(voxel.X(), voxel.Y())
             r = connectedBox(col, row, 1, 1) #, voxel.Width())

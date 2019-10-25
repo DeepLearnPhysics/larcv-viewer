@@ -25,7 +25,7 @@ class image2d(recoBase):
                 thisView = view_manager.getViewPorts()[image2d_plane.meta().id()]
             except:
                 thisView = view_manager.getViewPorts()[i]
-            self._data_arr.append(copy.copy(larcv.as_ndarray(image2d_plane).T))
+            self._data_arr.append(copy.copy(larcv.as_ndarray(image2d_plane)))
 
             thisView.drawPlane(self._data_arr[-1])
 
