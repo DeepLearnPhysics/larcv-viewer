@@ -34,7 +34,7 @@ class cluster2d(recoBase):
 
         #Get the list of cluster2d sets:
         event_sparse_cluster = io_manager.get_data(self._product_name, str(self._producerName))
-        event_sparse_cluster = larcv.EventSparseCluster2D.to_sparse_cluster(event_sparse_cluster)
+        # event_sparse_cluster = larcv.EventSparseCluster2D.to_sparse_cluster(event_sparse_cluster)
         # if self._producerName in io_manager.producer_list(self._product_name):
         #     hasROI = True
         # else:
@@ -55,7 +55,7 @@ class cluster2d(recoBase):
             # extend the list of clusters
             self._listOfClusters.append([])
 
-            for i in range(max(1,clusters.as_vector().size() -1)):
+            for i in range(max(1,len(clusters.as_vector()) -1)):
                 cluster = clusters.as_vector()[i]
                 # Now make the cluster
                 cluster_box_coll = boxCollection()

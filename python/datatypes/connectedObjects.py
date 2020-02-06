@@ -134,7 +134,7 @@ class boxCollection(QtCore.QObject):
             self.highlightChange.emit()
 
     def drawHits(self, view, cluster, meta):
-        for i in range(cluster.as_vector().size()):
+        for i in range(len(cluster.as_vector())):
             voxel = cluster.as_vector()[i]
             # Figure out the row and column from the id:
             col = meta.coordinate(voxel.id(),0)
