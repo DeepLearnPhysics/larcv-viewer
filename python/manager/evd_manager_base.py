@@ -34,12 +34,13 @@ class evd_manager_base(QtCore.QObject):
 
 
         if _file != None:
-            flist=larcv.VectorOfString()
+            # flist=larcv.VectorOfString()
             if type(_file) is list:
-                for f in _file: flist.push_back(f)
-                self._driver.override_input_file(flist)
+            #     for f in _file: flist.push_back(f)
+                self._driver.override_input_file(_file)
             else:
-                flist.push_back(_file)
+                flist = []
+                flist.append(_file)
                 self._driver.override_input_file(flist)
 
         self._driver.initialize()
@@ -67,31 +68,31 @@ class evd_manager_base(QtCore.QObject):
 
         product = "image2d"
         producers = self._driver.io().producer_list(product)
-        if producers.size() == 0:
+        if len(producers) == 0:
             product = "sparse2d"
             producers = self._driver.io().producer_list(product)
-        if producers.size() == 0:
+        if len(producers) == 0:
             product = "cluster2d"
             producers = self._driver.io().producer_list(product)
         
-        if producers.size() == 0:
+        if len(producers) == 0:
             raise Exception("No Meta avialable to define viewer boundaries")
 
-        producer = producers.front()
+        producer = producers[0]
 
 
-        meta_vec = larcv.VectorOfImageMeta2D()
+        meta_vec = []
 
         data = self._driver.io().get_data(product, producer)
-        if product == "image2d":
-            data = larcv.EventImage2D.to_image2d(data)
-        if product == "sparse2d":
-            data = larcv.EventSparseTensor2D.to_sparse_tensor(data)            
-        if product == "cluster2d":
-            data = larcv.EventSparseCluster2D.to_sparse_cluster(data)
+        # if product == "image2d":
+        #     data = larcv.EventImage2D.to_image2d(data)
+        # if product == "sparse2d":
+        #     data = larcv.EventSparseTensor2D.to_sparse_tensor(data)            
+        # if product == "cluster2d":
+        #     data = larcv.EventSparseCluster2D.to_sparse_cluster(data)
 
         for data_obj in data.as_vector():
-            meta_vec.push_back(data_obj.meta())
+            meta_vec.append(data_obj.meta())
 
         self._meta.refresh(meta_vec)
 

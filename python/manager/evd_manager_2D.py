@@ -28,7 +28,7 @@ class evd_manager_2D(evd_manager_base):
         if product in self._drawnClasses:
             self._drawnClasses[product].setProducer(producer)
             self._drawnClasses[product].clearDrawnObjects(view_manager)
-            self._drawnClasses[product].drawObjects(view_manager, self._io_manager, self.meta())
+            self._drawnClasses[product].drawObjects(view_manager, self._driver.io(), self.meta())
             return
 
         # Now, draw the new product
@@ -41,7 +41,7 @@ class evd_manager_2D(evd_manager_base):
             self._drawnClasses.update({product: drawingClass})
 
             # Need to process the event
-            drawingClass.drawObjects(view_manager, self._io_manager, self.meta())
+            drawingClass.drawObjects(view_manager, self._driver.io(), self.meta())
 
 
     def clearAll(self, view_manager):
@@ -57,7 +57,7 @@ class evd_manager_2D(evd_manager_base):
         # self.drawTruth()
         for item in order:
             if item in self._drawnClasses:
-                self._drawnClasses[item].drawObjects(view_manager, self._io_manager, self.meta())
+                self._drawnClasses[item].drawObjects(view_manager, self._driver.io(), self.meta())
 
 
 

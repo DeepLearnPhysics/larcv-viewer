@@ -36,7 +36,7 @@ class sparse2d(recoBase):
 
         #Get the list of sparse2d sets:
         sparse_2d_set = io_manager.get_data(self._product_name, str(self._producerName))
-        sparse_2d_set = larcv.EventSparseTensor2D.to_sparse_tensor(sparse_2d_set)
+        # sparse_2d_set = larcv.EventSparseTensor2D.to_sparse_tensor(sparse_2d_set)
         # if self._producerName in io_manager.producer_list(self._product_name):
         #     hasROI = True
         # else:
@@ -72,12 +72,16 @@ class sparse2d(recoBase):
             # If we don't, the memory underneath for the std::vectors will
             # be freed and anything might end up there.  This will corrupt the 
             # numpy arrays below since they share the memory.
-            cpp_indexes = voxelset.indexes()
-            cpp_values = voxelset.values()
             meta = voxelset.meta()
 
-            indexes = larcv.as_ndarray_sizet(cpp_indexes)
-            values  = larcv.as_ndarray_float(cpp_values)
+            # cpp_indexes = voxelset.indexes()
+            # cpp_values = voxelset.values()
+
+            # indexes = larcv.as_ndarray_sizet(cpp_indexes)
+            # values  = larcv.as_ndarray_float(cpp_values)
+
+            indexes = voxelset.indexes()
+            values = voxelset.values()
 
             # Reject all out-of-bounds indexes:
             in_bounds = indexes < meta.total_voxels()

@@ -64,10 +64,9 @@ class cluster3d(recoBase3D):
 
         #Get the list of sparse3d sets:
         event_cluster3d = io_manager.get_data(self._product_name, str(self._producerName))
-        event_cluster3d = larcv.EventSparseCluster3D.to_sparse_cluster(event_cluster3d)
 
-        voxels = event_cluster3d.as_vector().front().as_vector()
-        self._meta = event_cluster3d.as_vector().front().meta() 
+        cluster_set = event_cluster3d.as_vector()[0]
+        self._meta = cluster_set.meta() 
 
 
 
@@ -77,8 +76,8 @@ class cluster3d(recoBase3D):
         _color_index = 0
 
 
-        # # This section draws voxels onto the environment:
-        for cluster in event_cluster3d.as_vector().front().as_vector():
+        # # This section draws clusters onto the environment:
+        for cluster in cluster_set.as_vector():
 
             _this_id_summed_charge = dict()
             for voxel in cluster.as_vector():

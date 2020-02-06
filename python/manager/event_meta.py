@@ -10,7 +10,7 @@ class event_meta(object):
     def refresh(self, meta_vec):
 
 
-        self._n_views = meta_vec.size()
+        self._n_views = len(meta_vec)
 
         self._x_min = []
         self._y_min = []
