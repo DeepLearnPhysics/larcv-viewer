@@ -4,7 +4,7 @@ import pyqtgraph, numpy
 from .connectedObjects import connectedBox, boxCollection
 from matplotlib  import cm, colors
 
-from larcv import larcv
+import larcv
 
 class sparse2d(recoBase):
 

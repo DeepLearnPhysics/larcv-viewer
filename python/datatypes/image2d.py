@@ -1,5 +1,6 @@
 from .database import recoBase
-from larcv import larcv
+
+import larcv
 import copy
 import numpy
 class image2d(recoBase):
@@ -8,7 +9,7 @@ class image2d(recoBase):
 
     def __init__(self):
         super(image2d, self).__init__()
-        self._product_name = 'image2d'
+        self._product_name = 'tensor2d'
 
     # this is the function that actually draws the cluster.
     def drawObjects(self, view_manager, io_manager, meta):

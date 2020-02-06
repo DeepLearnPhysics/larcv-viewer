@@ -2,7 +2,7 @@ from .database import recoBase
 from pyqtgraph.Qt import QtGui, QtCore
 from .connectedObjects import connectedBox, boxCollection
 
-from larcv import larcv
+import larcv
 
 class cluster2d(recoBase):
 

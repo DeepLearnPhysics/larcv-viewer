@@ -3,7 +3,7 @@ from pyqtgraph.Qt import QtGui, QtCore
 import numpy
 import pyqtgraph.opengl as gl
 
-from larcv import larcv
+import larcv
 
 class cluster3d(recoBase3D):
 

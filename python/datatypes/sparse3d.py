@@ -7,7 +7,7 @@ except:
     print("Error, must have open gl to use this viewer.")
     exit(-1)
 
-from larcv import larcv
+import larcv
 
 class sparse3d(recoBase):
 
@@ -50,10 +50,11 @@ class sparse3d(recoBase):
 
         #Get the list of sparse3d sets:
         event_voxel3d = io_manager.get_data(self._product_name, str(self._producerName))
-        event_voxel3d = larcv.EventSparseTensor3D.to_sparse_tensor(event_voxel3d)
+        # event_voxel3d = larcv.EventSparseTensor3D.to_sparse_tensor(event_voxel3d)
 
-        voxels = event_voxel3d.as_vector().front().as_vector()
-        self._meta = event_voxel3d.as_vector().front().meta() 
+
+        voxels = event_voxel3d.as_vector()[0]
+        self._meta = voxels.meta() 
 
         # view_manager.getView().updateMeta(self._meta)
 
@@ -61,7 +62,7 @@ class sparse3d(recoBase):
 
         self._id_summed_charge = dict()
         # # This section draws voxels onto the environment:
-        for voxel in voxels:
+        for voxel in voxels.as_vector():
 
             if voxel.id() >= self._meta.total_voxels():
                 continue

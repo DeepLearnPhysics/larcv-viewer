@@ -2,7 +2,7 @@ from pyqtgraph.Qt import QtCore
 
 from .event_meta import event_meta
 
-from larcv import larcv
+import larcv
 
 class evd_manager_base(QtCore.QObject):
 
@@ -21,7 +21,6 @@ class evd_manager_base(QtCore.QObject):
         # For the larcv manager, using the IOManager to get at the data
         self._driver =  larcv.ProcessDriver("ProcessDriver")
         self._driver.configure(self._config)
-        self._io_manager = self._driver.io()
 
         # Meta keeps track of information about number of planes, visible
         # regions, etc.:
@@ -54,12 +53,12 @@ class evd_manager_base(QtCore.QObject):
     def refresh_meta(self):
         # # Read in any of the image2d products if none is specified.
         # # Use it's meta info to build up the meta for the viewer
-        # _producers = self._io_manager.producer_list('image2d')
+        # _producers = self._driver.io().producer_list('image2d')
         # if 'wire' in _producers:
         #     _producer = 'wire'
         # else:
         #     _producer = _producers[-1]
-        # _event_image2d = self._io_manager.get_data('image2d',_producer)
+        # _event_image2d = self._driver.io().get_data('image2d',_producer)
         
 
         # Meta information can come from either image2d, sparse2d or cluster2d
@@ -67,13 +66,13 @@ class evd_manager_base(QtCore.QObject):
         # it goes to sparse2d next, then cluster2d
 
         product = "image2d"
-        producers = self._io_manager.producer_list(product)
+        producers = self._driver.io().producer_list(product)
         if producers.size() == 0:
             product = "sparse2d"
-            producers = self._io_manager.producer_list(product)
+            producers = self._driver.io().producer_list(product)
         if producers.size() == 0:
             product = "cluster2d"
-            producers = self._io_manager.producer_list(product)
+            producers = self._driver.io().producer_list(product)
         
         if producers.size() == 0:
             raise Exception("No Meta avialable to define viewer boundaries")
@@ -83,7 +82,7 @@ class evd_manager_base(QtCore.QObject):
 
         meta_vec = larcv.VectorOfImageMeta2D()
 
-        data = self._io_manager.get_data(product, producer)
+        data = self._driver.io().get_data(product, producer)
         if product == "image2d":
             data = larcv.EventImage2D.to_image2d(data)
         if product == "sparse2d":
@@ -101,8 +100,8 @@ class evd_manager_base(QtCore.QObject):
 
     # This function will return all producers for the given product
     def getProducers(self, product):
-        if self._io_manager is not None:
-            return self._io_manager.producer_list(product)
+        if self._driver.io() is not None:
+            return self._driver.io().producer_list(product)
 
     # This function returns the list of products that can be drawn:
     def getDrawableProducts(self):
@@ -110,30 +109,30 @@ class evd_manager_base(QtCore.QObject):
 
     # override the run,event,subrun functions:
     def run(self):
-        if self._io_manager is None:
+        if self._driver.io() is None:
             return 0
-        return self._io_manager.event_id().run()
+        return self._driver.io().event_id().run()
 
     def event(self):
-        if self._io_manager is None:
+        if self._driver.io() is None:
             return 0
-        return self._io_manager.event_id().event()
+        return self._driver.io().event_id().event()
 
     def subrun(self):
-        if self._io_manager is None:
+        if self._driver.io() is None:
             return 0
-        return self._io_manager.event_id().subrun()
+        return self._driver.io().event_id().subrun()
 
     # def internalEvent(self):
     def entry(self):
-        if self._io_manager is not None:
-            return self._io_manager.current_entry()
+        if self._driver.io() is not None:
+            return self._driver.io().current_entry()
         else:
             return -1
 
     def n_entries(self):
-        if self._io_manager is not None:
-            return self._io_manager.get_n_entries()
+        if self._driver.io() is not None:
+            return self._driver.io().get_n_entries()
         else:
             return 0
 
