@@ -95,6 +95,7 @@ class sparse3d(recoBase):
                              smooth=False)
 
         # mesh.setGLOptions("additive")        
+        mesh.setGLOptions("translucent")        
         self._gl_voxel_mesh = mesh
         view_manager.getView().addItem(self._gl_voxel_mesh)
 

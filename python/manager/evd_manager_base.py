@@ -68,6 +68,7 @@ class evd_manager_base(QtCore.QObject):
 
         product = "image2d"
         producers = self._driver.io().producer_list(product)
+
         if len(producers) == 0:
             product = "sparse2d"
             producers = self._driver.io().producer_list(product)
@@ -77,6 +78,7 @@ class evd_manager_base(QtCore.QObject):
         
         if len(producers) == 0:
             raise Exception("No Meta avialable to define viewer boundaries")
+
 
         producer = producers[0]
 
@@ -112,17 +114,17 @@ class evd_manager_base(QtCore.QObject):
     def run(self):
         if self._driver.io() is None:
             return 0
-        return self._driver.io().event_id().run()
+        return self._driver.event_id().run()
 
     def event(self):
         if self._driver.io() is None:
             return 0
-        return self._driver.io().event_id().event()
+        return self._driver.event_id().event()
 
     def subrun(self):
         if self._driver.io() is None:
             return 0
-        return self._driver.io().event_id().subrun()
+        return self._driver.event_id().subrun()
 
     # def internalEvent(self):
     def entry(self):

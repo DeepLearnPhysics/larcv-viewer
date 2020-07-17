@@ -9,7 +9,6 @@ class particle2d(recoBase):
     def __init__(self):
         super(particle2d, self).__init__()
         self._product_name = 'particle'
-        larcv.load_pyutil()
 
     # this is the function that actually draws the cluster.
     def drawObjects(self, view_manager, io_manager, meta):
@@ -25,21 +24,25 @@ class particle2d(recoBase):
             self._drawnObjects.append([])
 
             for particle in event_particle.as_vector():
+                
+                if particle.parent_track_id() == 0:
+                    print(particle)
+
 
                 # particle = event_particle.at(i)
-                bounding_box = particle.boundingbox_2d(plane)
+                # bounding_box = particle.boundingbox_2d(plane)
 
-                left = meta.wire_to_col(bounding_box.min_y(), plane)
-                right = meta.wire_to_col(bounding_box.max_y(), plane)
-                top = meta.time_to_row(bounding_box.min_x(), plane)
-                bottom = meta.time_to_row(bounding_box.max_x(), plane)
+                # left = meta.wire_to_col(bounding_box.min_y(), plane)
+                # right = meta.wire_to_col(bounding_box.max_y(), plane)
+                # top = meta.time_to_row(bounding_box.min_x(), plane)
+                # bottom = meta.time_to_row(bounding_box.max_x(), plane)
 
-                #r = QtGui.QGraphicsRectItem(bottom, left, (top - bottom), (right-left))
-                r = QtGui.QGraphicsRectItem(left, bottom, (right-left), (top - bottom))
-                r.setPen(pg.mkPen('r'))
-                r.setBrush(pg.mkColor((0,0,0,0)))
-                self._drawnObjects[plane].append(r)
-                view._plot.addItem(r)
+                # #r = QtGui.QGraphicsRectItem(bottom, left, (top - bottom), (right-left))
+                # r = QtGui.QGraphicsRectItem(left, bottom, (right-left), (top - bottom))
+                # r.setPen(pg.mkPen('r'))
+                # r.setBrush(pg.mkColor((0,0,0,0)))
+                # self._drawnObjects[plane].append(r)
+                # view._plot.addItem(r)
 
         return
 
