@@ -335,7 +335,7 @@ class gui(QtGui.QWidget):
     self.setWindowTitle('Event Display')    
     self.setFocus()
     self.show()
-    self._view_manager.setRangeToMax()
+    # self._view_manager.setRangeToMax()
 
   def keyPressEvent(self,e):
     if e.key() == QtCore.Qt.Key_N:

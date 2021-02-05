@@ -69,6 +69,8 @@ class evd_manager_base(QtCore.QObject):
         product = "image2d"
         producers = self._driver.io().producer_list(product)
 
+
+
         if len(producers) == 0:
             product = "sparse2d"
             producers = self._driver.io().producer_list(product)
@@ -80,7 +82,7 @@ class evd_manager_base(QtCore.QObject):
             raise Exception("No Meta avialable to define viewer boundaries")
 
 
-        producer = producers[0]
+        producer = producers[-1]
 
 
         meta_vec = []
