@@ -1,6 +1,12 @@
 from pyqtgraph.Qt import QtGui, QtCore
 import pyqtgraph as pg
 
+# import line_profiler
+# import atexit
+# profile = line_profiler.LineProfiler()
+# atexit.register(profile.print_stats)
+
+
 # This class wraps the hit object to allow them to all function together
 class connectedBox(QtGui.QGraphicsRectItem):
 
@@ -133,17 +139,21 @@ class boxCollection(QtCore.QObject):
         if self.sender() == None:
             self.highlightChange.emit()
 
+    # @profile
     def drawHits(self, view, cluster, meta):
-        for i in range(len(cluster.as_vector())):
-            voxel = cluster.as_vector()[i]
+        voxels = cluster.as_vector()
+        color = pg.mkColor(self._color)
+        pen = pg.mkPen(None)
+        for voxel in voxels:
+            # voxel = cluster.as_vector()[i]
             # Figure out the row and column from the id:
             col = meta.coordinate(voxel.id(),0)
             row = meta.coordinate(voxel.id(),1)
             # Draws a rectangle at (x,y,xlength, ylength)
             # print "Drawing voxel at ({}, {})".format(voxel.X(), voxel.Y())
             r = connectedBox(col, row, 1, 1) #, voxel.Width())
-            r.setPen(pg.mkPen(None))
-            r.setBrush(pg.mkColor(self._color))
+            r.setPen(pen)
+            r.setBrush(color)
             self._listOfHits.append(r)
             view._plot.addItem(r)
 
