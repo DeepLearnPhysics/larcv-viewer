@@ -1,7 +1,8 @@
 from .database import recoBase
 from pyqtgraph.Qt import QtGui, QtCore
-from .connectedObjects import connectedBox, boxCollection
 
+
+import pyqtgraph, numpy
 import larcv
 
 class cluster2d(recoBase):
@@ -43,30 +44,62 @@ class cluster2d(recoBase):
         # if hasROI:
         #     event_roi = io_manager.get_data(self._product_name, str(self._producerName))
 
+        pen = pyqtgraph.mkPen((0, 0, 0), width=1)
+
         for plane, view in view_manager.getViewPorts().items():
+            
+            self._drawnObjects.append([])
+
             colorIndex = 0
 
             # Get the cluster2d clusters for this plane:
             # try:
-            clusters = event_sparse_cluster.sparse_cluster(plane)
+            sparse_clusters = event_sparse_cluster.sparse_cluster(plane)
             # except:
                 # continue
+            meta = sparse_clusters.meta()
 
             # extend the list of clusters
             self._listOfClusters.append([])
 
-            for i in range(max(1,len(clusters.as_vector()) -1)):
-                cluster = clusters.as_vector()[i]
-                # Now make the cluster
-                cluster_box_coll = boxCollection()
-                cluster_box_coll.setColor(self._clusterColors[colorIndex])
-                cluster_box_coll.setPlane(plane)
+            clusters = sparse_clusters.as_vector()
+            for i, cluster  in enumerate(clusters):
+                if i == len(clusters) - 1: break
 
-                # Keep track of the cluster for drawing management
-                self._listOfClusters[plane].append(cluster_box_coll)
 
-                # draw the hits in this cluster:
-                cluster_box_coll.drawHits(view, cluster, clusters.meta())
+                indexes = cluster.indexes()
+                values  = cluster.values()
+
+
+                # # Reject all out-of-bounds indexes:
+                in_bounds = indexes < meta.total_voxels()
+                # oob = indexes >= meta.total_voxels()
+                # Merge the bounds:
+                # in_bounds = numpy.logical_and(in_bounds, oob)
+                indexes = indexes[in_bounds]
+                values  = values[in_bounds]
+
+                dims = [meta.number_of_voxels(0), meta.number_of_voxels(1) ]
+                x, y = numpy.unravel_index(indexes, dims)
+
+                y = y.astype(float) + 0.5
+                x = x.astype(float) + 0.5
+
+                # colors = cmap.map(values, mode='float')
+
+
+                this_item = pyqtgraph.ScatterPlotItem()
+                color = pyqtgraph.mkColor(self._clusterColors[colorIndex])
+
+                this_item.setData(x, y, size=1, pxMode=False, 
+                    symbol='s', pen=None, 
+                    brush = color,
+                    # hoverable=True, hoverPen=pen
+                    )
+
+                view._plot.addItem(this_item)
+                self._drawnObjects[plane].append(this_item)
+
 
 
 
