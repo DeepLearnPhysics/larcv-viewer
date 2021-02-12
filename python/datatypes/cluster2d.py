@@ -13,7 +13,7 @@ class cluster2d(recoBase):
         super(cluster2d, self).__init__()
         self._product_name = 'cluster2d'
 
-        self._listOfClusters = []
+        # self._listOfClusters = []
 
         # Defining the cluster2d colors:
         self._clusterColors = [
@@ -60,7 +60,7 @@ class cluster2d(recoBase):
             meta = sparse_clusters.meta()
 
             # extend the list of clusters
-            self._listOfClusters.append([])
+            # self._listOfClusters.append([])
 
             clusters = sparse_clusters.as_vector()
             for i, cluster  in enumerate(clusters):
@@ -107,14 +107,14 @@ class cluster2d(recoBase):
                 if colorIndex >= len(self._clusterColors):
                     colorIndex = 0
 
-    def clearDrawnObjects(self, view_manager):
-        i_plane = 0
-        # erase the clusters
-        for plane in self._listOfClusters:
-            view = view_manager.getViewPorts()[i_plane]
-            i_plane += 1
-            for cluster in plane:
-                cluster.clearHits(view)
+    # def clearDrawnObjects(self, view_manager):
+    #     i_plane = 0
+    #     # erase the clusters
+    #     for plane in self._listOfClusters:
+    #         view = view_manager.getViewPorts()[i_plane]
+    #         i_plane += 1
+    #         for cluster in plane:
+    #             cluster.clearHits(view)
 
 
-        self._listOfClusters = []
+    #     self._listOfClusters = []
