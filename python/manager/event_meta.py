@@ -20,7 +20,6 @@ class event_meta(object):
         self._x_n_pixels = []
         x_ind = 0
         y_ind = 1
-        print(len(meta_vec))
         for meta in meta_vec:
             self._x_min.append(meta.origin(0))
             self._y_min.append(meta.origin(1))

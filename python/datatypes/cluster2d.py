@@ -17,17 +17,18 @@ class cluster2d(recoBase):
 
         # Defining the cluster2d colors:
         self._clusterColors = [
-            (0, 147, 147, 125),  # dark teal
-            (0, 0, 252, 125),   # bright blue
-            (156, 0, 156, 125),  # purple
-            (255, 0, 255, 125),  # pink
-            (255, 0, 0, 125),  # red
-            (175, 0, 0, 125),  # red/brown
-            (252, 127, 0, 125),  # orange
-            (102, 51, 0, 125),  # brown
-            (127, 127, 127, 125),  # dark gray
-            (210, 210, 210, 125),  # gray
-            (100, 253, 0, 125)  # bright green
+            (0, 147, 147, 125),    # dark teal
+            (0, 0, 252, 125),      # bright blue
+            (156, 0, 156, 125),    # purple
+            (255, 0, 255, 125),    # pink
+            (255, 0, 0, 125),      # red
+            (175, 0, 0, 125),      # red/brown
+            (252, 127, 0, 125),    # orange
+            (102, 51, 0, 125),     # brown
+            (100, 253, 0, 125),    # bright green
+            (255, 248, 202, 125),  # tan
+            (255, 248, 202, 125),  # tan
+            (255, 148, 241, 125),  # pink
         ]
 
     # this is the function that actually draws the cluster.
@@ -69,7 +70,7 @@ class cluster2d(recoBase):
 
                 indexes = cluster.indexes()
                 values  = cluster.values()
-
+                if len(values) == 0: continue
 
                 # # Reject all out-of-bounds indexes:
                 in_bounds = indexes < meta.total_voxels()

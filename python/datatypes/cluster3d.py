@@ -47,15 +47,18 @@ class cluster3d(recoBase3D):
 
         # Defining the cluster3d colors:
         self._clusterColors = [
-            (0, 147, 147, 125),  # dark teal
-            (0, 0, 252, 125),   # bright blue
-            (156, 0, 156, 125),  # purple
-            (255, 0, 255, 125),  # pink
-            (255, 0, 0, 125),  # red
-            (175, 0, 0, 125),  # red/brown
-            (252, 127, 0, 125),  # orange
-            (102, 51, 0, 125),  # brown
-            (100, 253, 0, 125)  # bright green
+            (0, 147, 147, 125),    # dark teal
+            (0, 0, 252, 125),      # bright blue
+            (156, 0, 156, 125),    # purple
+            (255, 0, 255, 125),    # pink
+            (255, 0, 0, 125),      # red
+            (175, 0, 0, 125),      # red/brown
+            (252, 127, 0, 125),    # orange
+            (102, 51, 0, 125),     # brown
+            (100, 253, 0, 125),    # bright green
+            (255, 248, 202, 125),  # tan
+            (255, 248, 202, 125),  # tan
+            (255, 148, 241, 125),  # pink
         ]
 
 
@@ -65,7 +68,7 @@ class cluster3d(recoBase3D):
         #Get the list of sparse3d sets:
         event_cluster3d = io_manager.get_data(self._product_name, str(self._producerName))
 
-        cluster_set = event_cluster3d.as_vector()[0]
+        cluster_set = event_cluster3d.at(0)
         self._meta = cluster_set.meta() 
 
 
@@ -82,7 +85,7 @@ class cluster3d(recoBase3D):
             _this_id_summed_charge = dict()
             for voxel in cluster.as_vector():
                 if voxel.id() >= self._meta.total_voxels():
-                    print("continuing")
+                    # print("continuing")
                     continue
                 if voxel.id() in _this_id_summed_charge:
                     _this_id_summed_charge[voxel.id()] += voxel.value()
