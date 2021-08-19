@@ -6,6 +6,7 @@ import argparse
 import sys
 import signal
 from pyqtgraph.Qt import QtGui, QtCore
+import larcv
 
 from manager import evd_manager_2D
 
@@ -34,7 +35,7 @@ def main():
 
     if args.config is None:
       print("No config supplied, using default configuration file.")
-      args.config = os.environ["LARCV_VIEWER_TOPDIR"] + "/config/default.cfg"
+      args.config = larcv.ProcessDriver.default_config()
 
 
     # If a file was passed, give it to the manager:

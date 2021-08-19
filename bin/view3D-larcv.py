@@ -6,6 +6,7 @@ import argparse
 import sys
 import signal
 from pyqtgraph.Qt import QtGui, QtCore
+import larcv
 
 try:
     import pyqtgraph.opengl as gl
@@ -17,7 +18,6 @@ except:
 from gui import evdgui3D
 from manager import evd_manager_3D
 import os
-
 
 
 def sigintHandler(*args):
@@ -38,7 +38,7 @@ def main():
 
     if args.config is None:
       print("No config supplied, using default configuration file.")
-      args.config = os.environ["LARCV_VIEWER_TOPDIR"] + "/config/default3D.cfg"
+      args.config = larcv.ProcessDriver.default_config()
 
 
     # If a file was passed, give it to the manager:
