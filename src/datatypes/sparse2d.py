@@ -2,7 +2,6 @@ from .database import recoBase
 from pyqtgraph.Qt import QtGui, QtCore
 import pyqtgraph, numpy
 from .connectedObjects import connectedBox, boxCollection
-from matplotlib  import cm, colors
 
 import larcv
 
@@ -95,7 +94,6 @@ class sparse2d(recoBase):
             y = y.astype(float) + 0.5
             x = x.astype(float) + 0.5
 
-            # colors = cmap.map(values, mode='float')
 
 
             this_item = pyqtgraph.ScatterPlotItem()

@@ -34,7 +34,6 @@ class drawableItems(object):
         return self._drawableClasses
 
 
-import pyqtgraph.opengl as gl
 from .sparse3d import sparse3d
 from .cluster3d import cluster3d
 from .particle3d import particle3d

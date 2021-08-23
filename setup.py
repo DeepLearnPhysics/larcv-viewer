@@ -114,7 +114,7 @@ setup(
     # Note that this is a list of additional keywords, separated
     # by commas, to be used to assist searching for the distribution in a
     # larger catalog.
-    keywords='larcv, pyqt5, pyqtgraph',  # Optional
+    keywords='larcv, pyqt5, pyqtgraph, PyOpenGL, numpy',  # Optional
 
     # When your source code is in a subdirectory under the project root, e.g.
     # `src/`, it is necessary to specify the `package_dir` argument.
