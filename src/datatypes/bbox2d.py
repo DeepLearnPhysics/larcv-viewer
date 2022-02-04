@@ -29,13 +29,25 @@ class bbox2d(recoBase):
 
             for bbox2d in collection.as_vector():
                 
-                print(bbox2d)
-
                 # A QRect can be constructed with a set of left, top, width and height integers, 
                 # or from a QPoint and a QSize.
 
                 c  = bbox2d.centroid()
                 hl = bbox2d.half_length()
+
+                # Convert everything with the meta from absolute location to
+                # pixel location (expected in QT)
+                c[0]  = meta.wire_to_col(c[0],  plane)
+                hl[0] = hl[0]*meta.comp_x(plane)
+                c[1]  = meta.time_to_row(c[1],  plane)
+                hl[1] = hl[1]*meta.comp_y(plane)
+                    
+
+                # Augment the widths if 0 to make it visible:
+                if hl[0] == 0:
+                    hl[0] += 1
+                if hl[1] == 0:
+                    hl[1] += 1
 
                 r = QtGui.QGraphicsRectItem(c[0] - hl[0], c[1] - hl[1], 2*hl[0], 2*hl[1])
 
@@ -50,7 +62,7 @@ class bbox2d(recoBase):
 
                 # #r = QtGui.QGraphicsRectItem(bottom, left, (top - bottom), (right-left))
                 # r = QtGui.QGraphicsRectItem(left, bottom, (right-left), (top - bottom))
-                r.setPen(pg.mkPen('r'))
+                r.setPen(pg.mkPen('r', width=4))
                 r.setBrush(pg.mkColor((0,0,0,0)))
                 self._drawnObjects[plane].append(r)
                 view._plot.addItem(r)

@@ -59,6 +59,11 @@ class event_meta(object):
     def time_to_row(self, time, plane):
         return self.rows(plane) * (1.0*(time - self.min_y(plane)) / self.height(plane))
 
+    def col_to_x(self, col, plane):
+        return  self.width(plane) * ( col / self.cols(plane) )
+
+    def row_to_y(self, row, plane):
+        return  self.height(plane) * ( row / self.rows(plane) )
 
     def min_y(self, plane):
         return self._y_min[plane]
