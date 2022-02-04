@@ -34,6 +34,12 @@ class bbox2d(recoBase):
 
                 c  = bbox2d.centroid()
                 hl = bbox2d.half_length()
+                
+                # Augment the widths if 0 to make it visible:
+                if hl[0] == 0:
+                    hl[0] += 1
+                if hl[1] == 0:
+                    hl[1] += 1
 
                 # Convert everything with the meta from absolute location to
                 # pixel location (expected in QT)
@@ -43,11 +49,7 @@ class bbox2d(recoBase):
                 hl[1] = hl[1]*meta.comp_y(plane)
                     
 
-                # Augment the widths if 0 to make it visible:
-                if hl[0] == 0:
-                    hl[0] += 1
-                if hl[1] == 0:
-                    hl[1] += 1
+
 
                 r = QtGui.QGraphicsRectItem(c[0] - hl[0], c[1] - hl[1], 2*hl[0], 2*hl[1])
 
