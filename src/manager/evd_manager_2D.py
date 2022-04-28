@@ -2,6 +2,7 @@ from pyqtgraph.Qt import QtCore
 import datatypes
 
 from .evd_manager_base import evd_manager_base
+from .event_meta import event_meta
 
 class evd_manager_2D(evd_manager_base):
 
@@ -9,8 +10,8 @@ class evd_manager_2D(evd_manager_base):
     Class to handle the 2D specific aspects of viewer
     '''
 
-    def __init__(self, config, _file=None):
-        super(evd_manager_2D, self).__init__(config, _file)
+    def __init__(self, config):
+        super(evd_manager_2D, self).__init__(config)
         self._drawableItems = datatypes.drawableItems()
 
     # this function is meant for the first request to draw an object or
@@ -42,6 +43,9 @@ class evd_manager_2D(evd_manager_base):
 
             # Need to process the event
             drawingClass.drawObjects(view_manager, self._driver.io(), self.meta())
+
+    def make_meta(selfa):
+        return event_meta()
 
 
     def clearAll(self, view_manager):

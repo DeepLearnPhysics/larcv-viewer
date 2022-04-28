@@ -81,7 +81,7 @@ class cluster3d(recoBase3D):
 
         # # This section draws clusters onto the environment:
         for cluster in cluster_set.as_vector():
-
+            if cluster.size() == 0: continue
             _this_id_summed_charge = dict()
             for voxel in cluster.as_vector():
                 if voxel.id() >= self._meta.total_voxels():
@@ -119,7 +119,6 @@ class cluster3d(recoBase3D):
         verts, faces, colors = self.buildTriangleArray(self._id_summed_charge,
                                                        self._assigned_colors,
                                                        view_manager)
-
 
         #make a mesh item:
         mesh = gl.GLMeshItem(vertexes=verts,

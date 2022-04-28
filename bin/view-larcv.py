@@ -1,16 +1,32 @@
 #!/usr/bin/env python
 
+import larcv
+
+def monkeypatch_ctypes():
+    import os
+    import ctypes.util
+    uname = os.uname()
+    if uname.sysname == "Darwin" and uname.release >= "20.":
+        real_find_library = ctypes.util.find_library
+        def find_library(name):
+            if name in {"OpenGL", "GLUT"}:  # add more names here if necessary
+                return f"/System/Library/Frameworks/{name}.framework/{name}"
+            return real_find_library(name)
+        ctypes.util.find_library = find_library
+    return
+monkeypatch_ctypes()
+
 
 # from gui import evdgui
 import argparse
 import sys
 import signal
-from pyqtgraph.Qt import QtGui, QtCore
-import larcv
+from pyqtgraph.Qt import QtWidgets, QtCore
 
 from manager import evd_manager_2D
 
 import os
+import json
 
 # This is to allow key commands to work when focus is on a box
 
@@ -31,16 +47,21 @@ def main():
 
     args = parser.parse_args()
 
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
 
     if args.config is None:
       print("No config supplied, using default configuration file.")
       args.config = larcv.ProcessDriver.default_config()
-
+    # Else, convert it to json:
+    else:
+        args.config = json.loads(args.config)
 
     # If a file was passed, give it to the manager:
+    if len(args.file) > 0:
+        args.config['IOManager']['Input']['InputFiles'] = args.file
 
-    manager = evd_manager_2D(args.config, args.file)
+
+    manager = evd_manager_2D(args.config)
 
 
     thisgui = evdgui()

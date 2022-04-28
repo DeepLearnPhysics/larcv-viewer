@@ -21,10 +21,11 @@ class evd_manager_base(QtCore.QObject):
         # For the larcv manager, using the IOManager to get at the data
         self._driver =  larcv.ProcessDriver("ProcessDriver")
         self._driver.configure(self._config)
+        self._driver.initialize()
 
         # Meta keeps track of information about number of planes, visible
         # regions, etc.:
-        self._meta = event_meta()
+        self._meta = self.make_meta()
 
 
         # Drawn classes is a list of things getting drawn, as well.
@@ -32,23 +33,15 @@ class evd_manager_base(QtCore.QObject):
 
         self._keyTable = dict()
 
+        self.go_to_entry(0)
 
-        if _file != None:
-            # flist=larcv.VectorOfString()
-            if type(_file) is list:
-            #     for f in _file: flist.push_back(f)
-                self._driver.override_input_file(_file)
-            else:
-                flist = []
-                flist.append(_file)
-                self._driver.override_input_file(flist)
-
-        self._driver.initialize()
-
-        self._driver.process_entry()
+        # self._driver.process_entry()
         # self._driver.set_id(run,subrun,event)
 
         self.refresh_meta()
+
+    def make_meta(self):
+        raise Exception("Must implement in derived class.")
 
 
     def refresh_meta(self):

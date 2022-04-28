@@ -10,6 +10,7 @@ class viewport(pg.GraphicsLayoutWidget):
   def __init__(self,plane=-1):
     super(viewport, self).__init__(border=None)
 
+
     # add a view box, which is a widget that allows an image to be shown
     self._plot = self.addPlot(border=None)
 
@@ -155,7 +156,6 @@ class viewport(pg.GraphicsLayoutWidget):
     return tick_vals, numpy.around(tick_labels)
 
   def updateRange(self, meta):
-
     # create the sets of ticks to update the image with:
     # Format is
     # [
@@ -211,6 +211,12 @@ class viewport(pg.GraphicsLayoutWidget):
       if len(x_major) < 10:
         break
 
+    # Unfortunately, these are expected as list so convert:
+    x_major = list(x_major)
+    x_minor = list(x_minor)
+    x_major = [(left, str(right)) for left, right in x_major]
+    x_minor = [(left, str(right)) for left, right in x_minor]
+    
     x_ticks = [x_major, x_minor]
 
 
@@ -261,7 +267,12 @@ class viewport(pg.GraphicsLayoutWidget):
         break
 
 
+    y_major = list(y_major)
+    y_major = [(left, str(right)) for left, right in y_major]
+    y_minor = list(y_minor)
+    y_minor = [(left, str(right)) for left, right in y_minor]
     y_ticks = [y_major, y_minor]
+
 
     self._x_axis.setTicks(x_ticks)
     self._y_axis.setTicks(y_ticks)

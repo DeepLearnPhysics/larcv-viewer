@@ -17,41 +17,33 @@ class evd_manager_3D(evd_manager_base):
     """This class handles file I/O and drawing for 3D viewer"""
 
 
-    def __init__(self, config, _file=None):
-        super(evd_manager_3D, self).__init__(config, _file)
+    def __init__(self, config):
+        super(evd_manager_3D, self).__init__(config)
         self._drawableItems = drawableItems3D()
                 
 
-    def init_manager(self, _file):
+    # def init_manager(self):
 
-        # For the larcv manager, using the IOManager to get at the data
-        self._driver =  larcv.ProcessDriver('ProcessDriver')
-        self._driver.configure(self._config)
+    #     # For the larcv manager, using the IOManager to get at the data
+    #     self._driver =  larcv.ProcessDriver('ProcessDriver')
+    #     self._driver.configure(self._config)
 
-        # Meta keeps track of information about number of planes, visible
-        # regions, etc.:
-        self._meta = event_meta3D()
-
-
-        # Drawn classes is a list of things getting drawn, as well.
-        self._drawnClasses = dict()
+    #     # Meta keeps track of information about number of planes, visible
+    #     # regions, etc.:
+    #     self._meta = self.get_meta()
 
 
-        if _file != None:
-            # flist=larcv.VectorOfString()
-            if type(_file) is list:
-            #     for f in _file: flist.push_back(f)
-                self._driver.override_input_file(_file)
-            else:
-                flist = []
-                flist.append(_file)
-                self._driver.override_input_file(flist)
+    #     # Drawn classes is a list of things getting drawn, as well.
+    #     self._drawnClasses = dict()
 
-        self._driver.initialize()
-        self.go_to_entry(0)
 
-        self.refresh_meta()
-        
+    #     self._driver.initialize()
+    #     self.go_to_entry(0)
+
+    #     self.refresh_meta()
+    
+    def make_meta(self):
+        return event_meta3D()
 
     def refresh_meta(self, producer=None):
         # Read in any of the image2d products if none is specified.

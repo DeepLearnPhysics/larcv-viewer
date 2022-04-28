@@ -4,6 +4,7 @@ from .particle2d import particle2d
 from .cluster2d  import cluster2d
 from .sparse2d   import sparse2d
 from .bbox2d     import bbox2d
+from .bbox3d     import bbox3d
 # This is the class that maintains the list of drawable items.
 # If your class isn't here, it can't be drawn
 import collections
@@ -48,7 +49,7 @@ class drawableItems3D(object):
         self._drawableClasses = collections.OrderedDict()
         self._drawableClasses.update({'Voxel3d': [sparse3d,"sparse3d"]})
         self._drawableClasses.update({'Cluster3d': [cluster3d,"cluster3d"]})
-        # self._drawableClasses.update({'Particle3D': [particle3d,"particle"]})
+        self._drawableClasses.update({'BBox3D': [bbox3d,"bbox3d"]})
 
     def getListOfTitles(self):
         return self._drawableClasses.keys()

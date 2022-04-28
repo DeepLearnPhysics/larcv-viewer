@@ -17,6 +17,9 @@ class bbox2d(recoBase):
         event_bbox2d = io_manager.get_data(self._product_name, str(self._producerName))
 
 
+        upper_offsets = [0,0,0]
+        lower_offsets = [0.6,.5,0.7]
+
         self._drawnObjects = []
         for plane, view in view_manager.getViewPorts().items():
             # get the plane
@@ -34,13 +37,22 @@ class bbox2d(recoBase):
 
                 c  = bbox2d.centroid()
                 hl = bbox2d.half_length()
-                
+                if 0.0 in hl: continue
+                # print(c)
+                # print(hl)
                 # Augment the widths if 0 to make it visible:
                 if hl[0] == 0:
                     hl[0] += 1
                 if hl[1] == 0:
                     hl[1] += 1
 
+                # We need to subtract a little if the vertex is below the cathode:
+                # if c[1] < meta.height(plane) / 2:
+                #     c[1] -= lower_offsets[plane]
+                #     pass
+                # else:
+                #     c[1] -= upper_offsets[plane]
+                # print(f"P{plane}: {c[1]}")
                 # Convert everything with the meta from absolute location to
                 # pixel location (expected in QT)
                 c[0]  = meta.wire_to_col(c[0],  plane)
@@ -64,7 +76,7 @@ class bbox2d(recoBase):
 
                 # #r = QtGui.QGraphicsRectItem(bottom, left, (top - bottom), (right-left))
                 # r = QtGui.QGraphicsRectItem(left, bottom, (right-left), (top - bottom))
-                r.setPen(pg.mkPen('r', width=4))
+                r.setPen(pg.mkPen('r', width=2))
                 r.setBrush(pg.mkColor((0,0,0,0)))
                 self._drawnObjects[plane].append(r)
                 view._plot.addItem(r)
