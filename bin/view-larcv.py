@@ -54,10 +54,19 @@ def main():
       args.config = larcv.ProcessDriver.default_config()
     # Else, convert it to json:
     else:
-        args.config = json.loads(args.config)
+        with open(args.config, 'rb') as f:
+            args.config = json.load(f)
+
+    print(args.config)
 
     # If a file was passed, give it to the manager:
     if len(args.file) > 0:
+        # Make sure the keys exist:
+        if "IOManager" not in args.config:
+            args.config["IOManager"] = {}
+        if "Input" not in args.config["IOManager"]:
+            args.config["IOManager"]["Input"] = {}
+
         args.config['IOManager']['Input']['InputFiles'] = args.file
 
 
