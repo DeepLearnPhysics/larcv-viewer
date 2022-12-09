@@ -5,7 +5,7 @@ except:
     print("Error, must have open gl to use this viewer.")
     exit(-1)
 
-from pyqtgraph.Qt import QtGui, QtCore
+from pyqtgraph.Qt import QtWidgets, QtCore, QtGui
 import pyqtgraph as pg
 import numpy as np
 import math
@@ -128,7 +128,7 @@ class viewport3D(gl.GLViewWidget):
             # Convert to relative coordinates to always leave the world center as the center point
             worldCenter = self.opts['center']
             # Check the type:
-            if type(worldCenter) is QtGui.QVector3D:
+            if type(worldCenter) is QtWidgets.QVector3D:
                 X = pos[0] - worldCenter.x()
                 Y = pos[1] - worldCenter.y()
                 Z = pos[2] - worldCenter.z()
@@ -182,7 +182,8 @@ class viewport3D(gl.GLViewWidget):
         super(viewport3D, self).orbit(azim, elev)
         self.viewChanged.emit()
 
-    def pan(self, dx, dy, dz, relative=False):
+    def pan(self, dx, dy, dz, relative="global"):
+        print(dx, dy, dz)
         super(viewport3D, self).pan(dx, dy, dz, relative)
         self.viewChanged.emit()
 

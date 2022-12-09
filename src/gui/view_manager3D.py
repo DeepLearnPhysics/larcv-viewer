@@ -1,6 +1,6 @@
 # Import the class that manages the view windows
 from .viewport3D import viewport3D
-from pyqtgraph.Qt import QtCore, QtGui
+from pyqtgraph.Qt import QtCore, QtWidgets
 import pyqtgraph as pg
 
 colorMap = {'ticks': [(1, (151, 30, 22, 100)),
@@ -32,8 +32,8 @@ class view_manager3D(QtCore.QObject):
         self._lookupTable = self._cmap.getLookupTable(255, alpha=0.75)
 
         # These boxes control the levels.
-        self._upperLevel = QtGui.QLineEdit()
-        self._lowerLevel = QtGui.QLineEdit()
+        self._upperLevel = QtWidgets.QLineEdit()
+        self._lowerLevel = QtWidgets.QLineEdit()
 
         self._upperLevel.returnPressed.connect(self.colorsChanged)
         self._lowerLevel.returnPressed.connect(self.colorsChanged)
@@ -48,10 +48,10 @@ class view_manager3D(QtCore.QObject):
 
 
 
-        self._layout = QtGui.QHBoxLayout()
+        self._layout = QtWidgets.QHBoxLayout()
         self._layout.addWidget(self._view)
 
-        colors = QtGui.QVBoxLayout()
+        colors = QtWidgets.QVBoxLayout()
         colors.addWidget(self._upperLevel)
         colors.addWidget(self._cmap)
         colors.addWidget(self._lowerLevel)

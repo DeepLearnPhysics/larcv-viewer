@@ -1,5 +1,5 @@
 from .database import recoBase
-from pyqtgraph.Qt import QtGui, QtCore
+from pyqtgraph.Qt import QtWidgets, QtCore
 import pyqtgraph as pg
 
 class bbox2d(recoBase):
@@ -37,7 +37,9 @@ class bbox2d(recoBase):
 
                 c  = bbox2d.centroid()
                 hl = bbox2d.half_length()
-                if 0.0 in hl: continue
+
+
+                # if 0.0 in hl: continue
                 # print(c)
                 # print(hl)
                 # Augment the widths if 0 to make it visible:
@@ -63,7 +65,7 @@ class bbox2d(recoBase):
 
 
 
-                r = QtGui.QGraphicsRectItem(c[0] - hl[0], c[1] - hl[1], 2*hl[0], 2*hl[1])
+                r = QtWidgets.QGraphicsRectItem(c[0] - hl[0], c[1] - hl[1], 2*hl[0], 2*hl[1])
 
 
                 # particle = event_bbox2d.at(i)
@@ -74,8 +76,8 @@ class bbox2d(recoBase):
                 # top = meta.time_to_row(bounding_box.min_x(), plane)
                 # bottom = meta.time_to_row(bounding_box.max_x(), plane)
 
-                # #r = QtGui.QGraphicsRectItem(bottom, left, (top - bottom), (right-left))
-                # r = QtGui.QGraphicsRectItem(left, bottom, (right-left), (top - bottom))
+                # #r = QtWidgets.QGraphicsRectItem(bottom, left, (top - bottom), (right-left))
+                # r = QtWidgets.QGraphicsRectItem(left, bottom, (right-left), (top - bottom))
                 r.setPen(pg.mkPen('r', width=2))
                 r.setBrush(pg.mkColor((0,0,0,0)))
                 self._drawnObjects[plane].append(r)

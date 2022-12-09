@@ -1,5 +1,5 @@
 
-from pyqtgraph.Qt import QtGui, QtCore
+from pyqtgraph.Qt import QtWidgets, QtCore
 import pyqtgraph as pg
 
 import numpy
@@ -56,8 +56,8 @@ class viewport(pg.GraphicsLayoutWidget):
     self._cmap.resize(1,1)
 
     # These boxes control the levels.
-    self._upperLevel = QtGui.QLineEdit()
-    self._lowerLevel = QtGui.QLineEdit()
+    self._upperLevel = QtWidgets.QLineEdit()
+    self._lowerLevel = QtWidgets.QLineEdit()
 
     self._upperLevel.returnPressed.connect(self.levelChanged)
     self._lowerLevel.returnPressed.connect(self.levelChanged)
@@ -71,14 +71,14 @@ class viewport(pg.GraphicsLayoutWidget):
     self._cmap.setMaximumWidth(25)
     self._lowerLevel.setMaximumWidth(35)
 
-    colors = QtGui.QVBoxLayout()
+    colors = QtWidgets.QVBoxLayout()
     colors.addWidget(self._upperLevel)
     colors.addWidget(self._cmap)
     colors.addWidget(self._lowerLevel)
-    self._totalLayout = QtGui.QHBoxLayout()
+    self._totalLayout = QtWidgets.QHBoxLayout()
     self._totalLayout.addWidget(self)
     self._totalLayout.addLayout(colors)
-    self._widget = QtGui.QWidget()
+    self._widget = QtWidgets.QWidget()
     self._widget.setLayout(self._totalLayout)
 
   def falseColor(self, apply_fc):
@@ -151,7 +151,7 @@ class viewport(pg.GraphicsLayoutWidget):
 
 
     tick_labels *= (maximum - minimum) / n
-    tick_labels -= minimum
+    tick_labels += minimum
 
     return tick_vals, numpy.around(tick_labels)
 

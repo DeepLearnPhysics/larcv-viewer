@@ -4,7 +4,7 @@ except:
     print("ERROR: Must have opengl for this display.")
 
 from .gui3D import gui3D
-from pyqtgraph.Qt import QtGui, QtCore
+from pyqtgraph.Qt import QtWidgets, QtCore
 from manager import evd_manager_3D
 
 from .recobox import recoBox
@@ -38,22 +38,22 @@ class evdgui3D(gui3D):
     # This function sets up the eastern widget
     def getEastLayout(self):
         # This function just makes a dummy eastern layout to use.
-        label1 = QtGui.QLabel("LArCV")
-        label2 = QtGui.QLabel("EVD 3D")
+        label1 = QtWidgets.QLabel("LArCV")
+        label2 = QtWidgets.QLabel("EVD 3D")
         font = label1.font()
         font.setBold(True)
         label1.setFont(font)
         label2.setFont(font)
 
-        self._eastWidget = QtGui.QWidget()
+        self._eastWidget = QtWidgets.QWidget()
         # This is the total layout
-        self._eastLayout = QtGui.QVBoxLayout()
+        self._eastLayout = QtWidgets.QVBoxLayout()
         # add the information sections:
         self._eastLayout.addWidget(label1)
         self._eastLayout.addWidget(label2)
         self._eastLayout.addStretch(1)
         
-        # self._paramsDrawBox = QtGui.QCheckBox("Draw Params.")
+        # self._paramsDrawBox = QtWidgets.QCheckBox("Draw Params.")
         # self._paramsDrawBox.stateChanged.connect(self.paramsDrawBoxWorker)
         # self._eastLayout.addWidget(self._paramsDrawBox)
         # self._eastLayout.addStretch(1)

@@ -1,4 +1,4 @@
-from pyqtgraph.Qt import QtGui, QtCore
+from pyqtgraph.Qt import QtWidgets, QtCore
 import pyqtgraph as pg
 
 # import line_profiler
@@ -8,7 +8,7 @@ import pyqtgraph as pg
 
 
 # This class wraps the hit object to allow them to all function together
-class connectedBox(QtGui.QGraphicsRectItem):
+class connectedBox(QtWidgets.QGraphicsRectItem):
 
     """docstring for connectedBox"""
 
@@ -40,7 +40,7 @@ class connectedBox(QtGui.QGraphicsRectItem):
         self._ownerToolTip = ownerToolTip
 
 
-class connectedCircle(QtGui.QGraphicsEllipseItem):
+class connectedCircle(QtWidgets.QGraphicsEllipseItem):
 
     """docstring for connectedCircle"""
 
@@ -76,8 +76,8 @@ class boxCollection(QtCore.QObject):
     # This class wraps a collection of hits and connects them together
     # it can draw and delete itself when provided with view_manage
     #
-    mouseEnter = QtCore.pyqtSignal(QtGui.QGraphicsSceneHoverEvent)
-    mouseExit = QtCore.pyqtSignal(QtGui.QGraphicsSceneHoverEvent)
+    mouseEnter = QtCore.pyqtSignal(QtWidgets.QGraphicsSceneHoverEvent)
+    mouseExit = QtCore.pyqtSignal(QtWidgets.QGraphicsSceneHoverEvent)
     highlightChange = QtCore.pyqtSignal()
 
     def __init__(self):

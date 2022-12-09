@@ -1,4 +1,4 @@
-from pyqtgraph.Qt import QtGui, QtCore
+from pyqtgraph.Qt import QtWidgets, QtCore
 
 # Import the class that manages the view windows
 from .viewport import viewport
@@ -39,8 +39,8 @@ class view_manager(QtCore.QObject):
     self._widgetList = []
 
     # loop through the list and add the drawing windows and their scale
-    self._widget = QtGui.QWidget()
-    self._layout = QtGui.QVBoxLayout()
+    self._widget = QtWidgets.QWidget()
+    self._layout = QtWidgets.QVBoxLayout()
     self._layout.setSpacing(0)
     # self._layout.setMargin(0)
     self._layout.setContentsMargins(0,0,0,0)

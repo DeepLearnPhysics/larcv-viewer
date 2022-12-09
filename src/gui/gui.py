@@ -3,14 +3,14 @@
 import sys, signal
 import argparse
 # import collections
-from pyqtgraph.Qt import QtGui, QtCore
+from pyqtgraph.Qt import QtWidgets, QtCore
 import pyqtgraph as pg
 import numpy as np
 
 # import evdmanager
 from .view_manager import view_manager
 
-class gui(QtGui.QWidget):
+class gui(QtWidgets.QWidget):
 
   def __init__(self):
     super(gui, self).__init__()
@@ -52,34 +52,34 @@ class gui(QtGui.QWidget):
   def getEventControlButtons(self):
 
     # This is a box to allow users to enter an event (larlite numbering)
-    self._goToLabel = QtGui.QLabel("Go to: ")
-    self._fileEntry = QtGui.QLineEdit()
+    self._goToLabel = QtWidgets.QLabel("Go to: ")
+    self._fileEntry = QtWidgets.QLineEdit()
     self._fileEntry.setToolTip("Enter an event to skip to that event (sequential numbering")
     self._fileEntry.returnPressed.connect(self.goToEventWorker)
     # These labels display current events
-    self._runLabel = QtGui.QLabel("Run: 0")
-    self._eventLabel = QtGui.QLabel("Ev.: 0")
-    self._subrunLabel = QtGui.QLabel("Subrun: 0")
+    self._runLabel = QtWidgets.QLabel("Run: 0")
+    self._eventLabel = QtWidgets.QLabel("Ev.: 0")
+    self._subrunLabel = QtWidgets.QLabel("Subrun: 0")
 
     # Jump to the next event
-    self._nextButton = QtGui.QPushButton("Next")
+    self._nextButton = QtWidgets.QPushButton("Next")
     # self._nextButton.setStyleSheet("background-color: red")
     self._nextButton.clicked.connect(self._event_manager.next)
     self._nextButton.setToolTip("Move to the next event.")
     # Go to the previous event
-    self._prevButton = QtGui.QPushButton("Previous")
+    self._prevButton = QtWidgets.QPushButton("Previous")
     self._prevButton.clicked.connect(self._event_manager.prev)
     self._prevButton.setToolTip("Move to the previous event.")
 
     # pack the buttons into a box
-    self._eventControlBox = QtGui.QVBoxLayout()
+    self._eventControlBox = QtWidgets.QVBoxLayout()
 
     # Make a horiztontal box for the event entry and label:
-    self._eventGrid = QtGui.QHBoxLayout()
+    self._eventGrid = QtWidgets.QHBoxLayout()
     self._eventGrid.addWidget(self._goToLabel)
     self._eventGrid.addWidget(self._fileEntry)
     # Another horizontal box for the run/subrun
-    # self._runSubRunGrid = QtGui.QHBoxLayout()
+    # self._runSubRunGrid = QtWidgets.QHBoxLayout()
     # self._runSubRunGrid.addWidget(self._eventLabel)
     # self._runSubRunGrid.addWidget(self._runLabel)
     # Pack it all together
@@ -107,26 +107,26 @@ class gui(QtGui.QWidget):
   def getDrawingControlButtons(self):
 
     # Button to set range to max
-    self._maxRangeButton = QtGui.QPushButton("Max Range")
+    self._maxRangeButton = QtWidgets.QPushButton("Max Range")
     self._maxRangeButton.setToolTip("Set the range of the viewers to show the whole event")
     self._maxRangeButton.clicked.connect(self._view_manager.setRangeToMax)
 
-    self._lockAspectRatio = QtGui.QCheckBox("Lock A.R.")
+    self._lockAspectRatio = QtWidgets.QCheckBox("Lock A.R.")
     self._lockAspectRatio.setToolTip("Lock the aspect ratio to 1:1")
     self._lockAspectRatio.stateChanged.connect(self.lockARWorker)
 
-    self._falseColorSelection = QtGui.QCheckBox("False Color")
+    self._falseColorSelection = QtWidgets.QCheckBox("False Color")
     self._falseColorSelection.setToolTip("Applies a false color scheme to images")
     self._falseColorSelection.stateChanged.connect(self.falseColorWorker)
 
     # add a box to restore the drawing defaults:
-    self._restoreDefaults = QtGui.QPushButton("Restore Defaults")
+    self._restoreDefaults = QtWidgets.QPushButton("Restore Defaults")
     self._restoreDefaults.setToolTip("Restore the drawing defaults of the views.")
     self._restoreDefaults.clicked.connect(self.restoreDefaultsWorker)
 
     # Pack the stuff into a layout
 
-    self._drawingControlBox = QtGui.QVBoxLayout()
+    self._drawingControlBox = QtWidgets.QVBoxLayout()
     self._drawingControlBox.addWidget(self._restoreDefaults)
     self._drawingControlBox.addWidget(self._maxRangeButton)
     self._drawingControlBox.addWidget(self._lockAspectRatio)
@@ -172,7 +172,7 @@ class gui(QtGui.QWidget):
     
   # This function prepares the quit buttons layout and returns it
   def getQuitLayout(self):
-    self._quitButton = QtGui.QPushButton("Quit")
+    self._quitButton = QtWidgets.QPushButton("Quit")
     self._quitButton.setToolTip("Close the viewer.")
     self._quitButton.clicked.connect(self.quit)
     return self._quitButton
@@ -187,31 +187,31 @@ class gui(QtGui.QWidget):
     # Add the quit button?
     quit_control = self.getQuitLayout()
     
-    self._westLayout = QtGui.QVBoxLayout()
+    self._westLayout = QtWidgets.QVBoxLayout()
     self._westLayout.addLayout(event_control)
     self._westLayout.addStretch(1)
     self._westLayout.addLayout(draw_control)
     self._westLayout.addStretch(1)
 
     # Add a section to allow users to just view one window instead of two/three
-    self._viewButtonGroup = QtGui.QButtonGroup()
+    self._viewButtonGroup = QtWidgets.QButtonGroup()
     # Draw all planes:
-    self._allViewsButton = QtGui.QRadioButton("All")
+    self._allViewsButton = QtWidgets.QRadioButton("All")
     self._allViewsButton.clicked.connect(self.viewSelectWorker)
     self._viewButtonGroup.addButton(self._allViewsButton)
 
     # Put the buttons in a layout
-    self._viewChoiceLayout = QtGui.QVBoxLayout()
+    self._viewChoiceLayout = QtWidgets.QVBoxLayout()
 
     # Make a label for this stuff:
-    self._viewChoiceLabel = QtGui.QLabel("View Options")
+    self._viewChoiceLabel = QtWidgets.QLabel("View Options")
     self._viewChoiceLayout.addWidget(self._viewChoiceLabel)
     self._viewChoiceLayout.addWidget(self._allViewsButton)
 
     i = 0
     self._viewButtonArray = []
     for plane in range(self._event_manager.n_views()):
-      button = QtGui.QRadioButton("Plane" + str(i))
+      button = QtWidgets.QRadioButton("Plane" + str(i))
       i += 1
       self._viewButtonGroup.addButton(button)
       button.clicked.connect(self.viewSelectWorker)
@@ -223,7 +223,7 @@ class gui(QtGui.QWidget):
     self._westLayout.addStretch(1)
 
     self._westLayout.addWidget(quit_control)
-    self._westWidget = QtGui.QWidget()
+    self._westWidget = QtWidgets.QWidget()
     self._westWidget.setLayout(self._westLayout)
     self._westWidget.setMaximumWidth(150)
     self._westWidget.setMinimumWidth(100)
@@ -234,16 +234,16 @@ class gui(QtGui.QWidget):
     # This layout contains the status bar, message bar, and the capture screen buttons
 
     # The screen capture button:
-    self._screenCaptureButton = QtGui.QPushButton("Capture Screen")
+    self._screenCaptureButton = QtWidgets.QPushButton("Capture Screen")
     self._screenCaptureButton.setToolTip("Capture the entire screen to file")
     self._screenCaptureButton.clicked.connect(self.screenCapture)
-    self._southWidget = QtGui.QWidget()
-    self._southLayout = QtGui.QHBoxLayout()
+    self._southWidget = QtWidgets.QWidget()
+    self._southLayout = QtWidgets.QHBoxLayout()
     # Add a status bar
-    self._statusBar = QtGui.QStatusBar()
+    self._statusBar = QtWidgets.QStatusBar()
     self._statusBar.showMessage("Test message")
     self._southLayout.addWidget(self._statusBar)
-    self._messageBar = QtGui.QStatusBar()
+    self._messageBar = QtWidgets.QStatusBar()
     self._southLayout.addWidget(self._messageBar)
     # self._southLayout.addStretch(1)
     self._southLayout.addWidget(self._screenCaptureButton)
@@ -257,9 +257,9 @@ class gui(QtGui.QWidget):
 
   def getEastLayout(self):
     # This function just makes a dummy eastern layout to use.
-    label = QtGui.QLabel("Dummy")
-    self._eastWidget = QtGui.QWidget()
-    self._eastLayout = QtGui.QVBoxLayout()
+    label = QtWidgets.QLabel("Dummy")
+    self._eastWidget = QtWidgets.QWidget()
+    self._eastLayout = QtWidgets.QVBoxLayout()
     self._eastLayout.addWidget(label)
     self._eastLayout.addStretch(1)
     self._eastWidget.setLayout(self._eastLayout)
@@ -276,7 +276,7 @@ class gui(QtGui.QWidget):
 
     # for child in self.centerWidget.children():
     #   print type(child)
-    #   if type(child) == QtGui.QVBoxLayout:
+    #   if type(child) == QtWidgets.QVBoxLayout:
     #     layout = child
 
     # print layout.children()
@@ -319,8 +319,8 @@ class gui(QtGui.QWidget):
     # Put the layout together
 
 
-    self.master = QtGui.QVBoxLayout()
-    self.slave = QtGui.QHBoxLayout()
+    self.master = QtWidgets.QVBoxLayout()
+    self.slave = QtWidgets.QHBoxLayout()
     self.slave.addWidget(self.westWidget)
     self.slave.addWidget(self.centerWidget)
     self.slave.addWidget(self.eastWidget)
@@ -362,7 +362,7 @@ class gui(QtGui.QWidget):
 
   def screenCapture(self):
     print("Screen Capture!")
-    dialog = QtGui.QFileDialog()
+    dialog = QtWidgets.QFileDialog()
     r = self._event_manager.run()
     e = self._event_manager.event()
     s = self._event_manager.subrun()
@@ -373,7 +373,7 @@ class gui(QtGui.QWidget):
         "PNG (*.png);;JPG (*.jpg);;All Files (*)")
 
     if pg.Qt.QT_LIB == pg.Qt.PYQT4:
-      pixmapImage = QtGui.QPixmap.grabWidget(self)
+      pixmapImage = QtWidgets.QPixmap.grabWidget(self)
       pixmapImage.save(f,"PNG")
     else:
       pixmapImage = super(gui, self).grab()

@@ -1,5 +1,5 @@
 from gui import gui
-from pyqtgraph.Qt import QtGui, QtCore
+from pyqtgraph.Qt import QtWidgets, QtCore
 
 from .recobox import recoBox
 
@@ -25,8 +25,8 @@ class evdgui(gui):
     # This function sets up the eastern widget
     def getEastLayout(self):
         # This function just makes a dummy eastern layout to use.
-        label1 = QtGui.QLabel("LArCV")
-        label2 = QtGui.QLabel("Display")
+        label1 = QtWidgets.QLabel("LArCV")
+        label2 = QtWidgets.QLabel("Display")
         font = label1.font()
         font.setBold(True)
         label1.setFont(font)
@@ -34,9 +34,9 @@ class evdgui(gui):
 
 
 
-        self._eastWidget = QtGui.QWidget()
+        self._eastWidget = QtWidgets.QWidget()
         # This is the total layout
-        self._eastLayout = QtGui.QVBoxLayout()
+        self._eastLayout = QtWidgets.QVBoxLayout()
         # add the information sections:
         self._eastLayout.addWidget(label1)
         self._eastLayout.addWidget(label2)

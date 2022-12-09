@@ -3,7 +3,7 @@
 import sys, signal
 import argparse
 # import collections
-from pyqtgraph.Qt import QtGui, QtCore
+from pyqtgraph.Qt import QtWidgets, QtCore
 import pyqtgraph as pg
 import numpy as np
 
@@ -11,7 +11,7 @@ from .view_manager3D import view_manager3D
 
 # Wrap the spin box class to allow key signals to pass to the gui
 
-class ConnectedSpinBox(QtGui.QSpinBox):
+class ConnectedSpinBox(QtWidgets.QSpinBox):
     """docstring for ConnectedSpinBox"""
     quitRequested = QtCore.pyqtSignal()
     def __init__(self):
@@ -29,7 +29,7 @@ class ConnectedSpinBox(QtGui.QSpinBox):
 
 
 
-class gui3D(QtGui.QWidget):
+class gui3D(QtWidgets.QWidget):
 
   def __init__(self):
     super(gui3D, self).__init__()
@@ -125,35 +125,35 @@ class gui3D(QtGui.QWidget):
   def getEventControlButtons(self):
 
     # This is a box to allow users to enter an event (larlite numbering)
-    self._goToLabel = QtGui.QLabel("Go to: ")
-    self._entryBox = QtGui.QLineEdit()
+    self._goToLabel = QtWidgets.QLabel("Go to: ")
+    self._entryBox = QtWidgets.QLineEdit()
     self._entryBox.setToolTip("Enter an event to skip to that event (larlite numbering")
     self._entryBox.returnPressed.connect(self.goToEventWorker)
     # These labels display current events
-    self._runLabel = QtGui.QLabel("Run: 0")
-    self._eventLabel = QtGui.QLabel("Ev.: 0")
-    self._subrunLabel = QtGui.QLabel("Subrun: 0")
+    self._runLabel = QtWidgets.QLabel("Run: 0")
+    self._eventLabel = QtWidgets.QLabel("Ev.: 0")
+    self._subrunLabel = QtWidgets.QLabel("Subrun: 0")
 
     # Jump to the next event
-    self._nextButton = QtGui.QPushButton("Next")
+    self._nextButton = QtWidgets.QPushButton("Next")
     # self._nextButton.setStyleSheet("background-color: red")
     self._nextButton.clicked.connect(self._event_manager.next)
     self._nextButton.setToolTip("Move to the next event.")
     # Go to the previous event
-    self._prevButton = QtGui.QPushButton("Previous")
+    self._prevButton = QtWidgets.QPushButton("Previous")
     self._prevButton.clicked.connect(self._event_manager.prev)
     self._prevButton.setToolTip("Move to the previous event.")
 
     
     # pack the buttons into a box
-    self._eventControlBox = QtGui.QVBoxLayout()
+    self._eventControlBox = QtWidgets.QVBoxLayout()
 
     # Make a horiztontal box for the event entry and label:
-    self._eventGrid = QtGui.QHBoxLayout()
+    self._eventGrid = QtWidgets.QHBoxLayout()
     self._eventGrid.addWidget(self._goToLabel)
     self._eventGrid.addWidget(self._entryBox)
     # Another horizontal box for the run/subrun
-    # self._runSubRunGrid = QtGui.QHBoxLayout()
+    # self._runSubRunGrid = QtWidgets.QHBoxLayout()
     # self._runSubRunGrid.addWidget(self._eventLabel)
     # self._runSubRunGrid.addWidget(self._runLabel)
     # Pack it all together
@@ -181,31 +181,31 @@ class gui3D(QtGui.QWidget):
   def getDrawingControlButtons(self):
 
     # Button to set range to max
-    self._maxRangeButton = QtGui.QPushButton("Max Range")
+    self._maxRangeButton = QtWidgets.QPushButton("Max Range")
     self._maxRangeButton.setToolTip("Set the range of the viewers to show the whole event")
     self._maxRangeButton.clicked.connect(self._view_manager.setRangeToMax)
 
 
     # add a box to restore the drawing defaults:
-    self._restoreDefaults = QtGui.QPushButton("Restore Defaults")
+    self._restoreDefaults = QtWidgets.QPushButton("Restore Defaults")
     self._restoreDefaults.setToolTip("Restore the drawing defaults of the views.")
     self._restoreDefaults.clicked.connect(self.restoreDefaultsWorker)
 
 
-    # self._presetUButton = QtGui.QPushButton("U Plane View")
+    # self._presetUButton = QtWidgets.QPushButton("U Plane View")
     # self._presetUButton.setToolTip("Set Camera to mimic the U Plane View")
     # self._presetUButton.clicked.connect(self.goToPresetCameraPosition)
-    # self._presetVButton = QtGui.QPushButton("V Plane View")
+    # self._presetVButton = QtWidgets.QPushButton("V Plane View")
     # self._presetVButton.setToolTip("Set Camera to mimic the V Plane View")
     # self._presetVButton.clicked.connect(self.goToPresetCameraPosition)
-    # self._presetYButton = QtGui.QPushButton("Y Plane View")
+    # self._presetYButton = QtWidgets.QPushButton("Y Plane View")
     # self._presetYButton.setToolTip("Set Camera to mimic the Y Plane View")
     # self._presetYButton.clicked.connect(self.goToPresetCameraPosition)
 
 
 
     # Add some controls to manage the camera
-    self._cameraControlLayout = QtGui.QHBoxLayout()
+    self._cameraControlLayout = QtWidgets.QHBoxLayout()
 
     # Get the min and max values for height, length, width:
 
@@ -215,11 +215,11 @@ class gui3D(QtGui.QWidget):
     
 
     # Define the x,y,z location of the camera and world center
-    self._cameraCenterLayout = QtGui.QVBoxLayout()
-    self._cameraLabel = QtGui.QLabel("Camera")
+    self._cameraCenterLayout = QtWidgets.QVBoxLayout()
+    self._cameraLabel = QtWidgets.QLabel("Camera")
     self._cameraCenterLayout.addWidget(self._cameraLabel)
-    self._cameraCenterXLayout = QtGui.QHBoxLayout()
-    self._cameraCenterXLabel = QtGui.QLabel("X:")
+    self._cameraCenterXLayout = QtWidgets.QHBoxLayout()
+    self._cameraCenterXLabel = QtWidgets.QLabel("X:")
     self._cameraCenterX = ConnectedSpinBox()
     self._cameraCenterX.setValue(0)
     self._cameraCenterX.setRange(-10*width,10*width)
@@ -229,8 +229,8 @@ class gui3D(QtGui.QWidget):
     self._cameraCenterXLayout.addWidget(self._cameraCenterX)
 
     self._cameraCenterLayout.addLayout(self._cameraCenterXLayout)
-    self._cameraCenterYLayout = QtGui.QHBoxLayout()
-    self._cameraCenterYLabel = QtGui.QLabel("Y:")
+    self._cameraCenterYLayout = QtWidgets.QHBoxLayout()
+    self._cameraCenterYLabel = QtWidgets.QLabel("Y:")
     self._cameraCenterY = ConnectedSpinBox()
     self._cameraCenterY.setValue(0)
     self._cameraCenterY.setRange(-10*height,10*height)
@@ -240,8 +240,8 @@ class gui3D(QtGui.QWidget):
     self._cameraCenterYLayout.addWidget(self._cameraCenterY)
 
     self._cameraCenterLayout.addLayout(self._cameraCenterYLayout)
-    self._cameraCenterZLayout = QtGui.QHBoxLayout()
-    self._cameraCenterZLabel = QtGui.QLabel("Z:")
+    self._cameraCenterZLayout = QtWidgets.QHBoxLayout()
+    self._cameraCenterZLabel = QtWidgets.QLabel("Z:")
     self._cameraCenterZ = ConnectedSpinBox()
     self._cameraCenterZ.setValue(0)
     self._cameraCenterZ.setRange(-10*length,10*length)   
@@ -252,11 +252,11 @@ class gui3D(QtGui.QWidget):
     self._cameraCenterLayout.addLayout(self._cameraCenterZLayout)
 
 
-    self._worldCenterLayout = QtGui.QVBoxLayout()
-    self._worldLabel = QtGui.QLabel("world")
+    self._worldCenterLayout = QtWidgets.QVBoxLayout()
+    self._worldLabel = QtWidgets.QLabel("world")
     self._worldCenterLayout.addWidget(self._worldLabel)
-    self._worldCenterXLayout = QtGui.QHBoxLayout()
-    self._worldCenterXLabel = QtGui.QLabel("X:")
+    self._worldCenterXLayout = QtWidgets.QHBoxLayout()
+    self._worldCenterXLabel = QtWidgets.QLabel("X:")
     self._worldCenterX = ConnectedSpinBox()
     self._worldCenterX.setValue(0)
     self._worldCenterX.setRange(-10*width,10*width)
@@ -266,8 +266,8 @@ class gui3D(QtGui.QWidget):
     self._worldCenterXLayout.addWidget(self._worldCenterX)
 
     self._worldCenterLayout.addLayout(self._worldCenterXLayout)
-    self._worldCenterYLayout = QtGui.QHBoxLayout()
-    self._worldCenterYLabel = QtGui.QLabel("Y:")
+    self._worldCenterYLayout = QtWidgets.QHBoxLayout()
+    self._worldCenterYLabel = QtWidgets.QLabel("Y:")
     self._worldCenterY = ConnectedSpinBox()
     self._worldCenterY.setValue(0)
     self._worldCenterY.setRange(-10*height,10*height)
@@ -277,8 +277,8 @@ class gui3D(QtGui.QWidget):
     self._worldCenterYLayout.addWidget(self._worldCenterY)
 
     self._worldCenterLayout.addLayout(self._worldCenterYLayout)
-    self._worldCenterZLayout = QtGui.QHBoxLayout()
-    self._worldCenterZLabel = QtGui.QLabel("Z:")
+    self._worldCenterZLayout = QtWidgets.QHBoxLayout()
+    self._worldCenterZLabel = QtWidgets.QLabel("Z:")
     self._worldCenterZ = ConnectedSpinBox()
     self._worldCenterZ.setValue(0)
     self._worldCenterZ.setRange(-10*length,10*length)   
@@ -292,7 +292,7 @@ class gui3D(QtGui.QWidget):
 
     # Pack the stuff into a layout
 
-    self._drawingControlBox = QtGui.QVBoxLayout()
+    self._drawingControlBox = QtWidgets.QVBoxLayout()
     self._drawingControlBox.addWidget(self._restoreDefaults)
     self._drawingControlBox.addWidget(self._maxRangeButton)
     self._drawingControlBox.addLayout(self._cameraControlLayout)
@@ -318,7 +318,7 @@ class gui3D(QtGui.QWidget):
     x = float(self._cameraCenterX.text())
     y = float(self._cameraCenterY.text())
     z = float(self._cameraCenterZ.text())
-    # self.updateCameraInfo(cameraPos=QtGui.QVector3D(x,y,z))
+    # self.updateCameraInfo(cameraPos=QtWidgets.QVector3D(x,y,z))
     self._view_manager.setCameraPosition(pos = (x,y,z) )
 
 
@@ -340,7 +340,7 @@ class gui3D(QtGui.QWidget):
     
   # This function prepares the quit buttons layout and returns it
   def getQuitLayout(self):
-    self._quitButton = QtGui.QPushButton("Quit")
+    self._quitButton = QtWidgets.QPushButton("Quit")
     self._quitButton.setToolTip("Close the viewer.")
     self._quitButton.clicked.connect(self.quit)
     return self._quitButton
@@ -355,7 +355,7 @@ class gui3D(QtGui.QWidget):
     # Add the quit button?
     quit_control = self.getQuitLayout()
     
-    self._westLayout = QtGui.QVBoxLayout()
+    self._westLayout = QtWidgets.QVBoxLayout()
     self._westLayout.addLayout(event_control)
     self._westLayout.addStretch(1)
     self._westLayout.addLayout(draw_control)
@@ -365,7 +365,7 @@ class gui3D(QtGui.QWidget):
     self._westLayout.addStretch(1)
 
     self._westLayout.addWidget(quit_control)
-    self._westWidget = QtGui.QWidget()
+    self._westWidget = QtWidgets.QWidget()
     self._westWidget.setLayout(self._westLayout)
     self._westWidget.setMaximumWidth(150)
     self._westWidget.setMinimumWidth(100)
@@ -376,13 +376,13 @@ class gui3D(QtGui.QWidget):
     # This layout contains the status bar and the capture screen buttons
 
     # The screen capture button:
-    self._screenCaptureButton = QtGui.QPushButton("Capture Screen")
+    self._screenCaptureButton = QtWidgets.QPushButton("Capture Screen")
     self._screenCaptureButton.setToolTip("Capture the entire screen to file")
     self._screenCaptureButton.clicked.connect(self.screenCapture)
-    self._southWidget = QtGui.QWidget()
-    self._southLayout = QtGui.QHBoxLayout()
+    self._southWidget = QtWidgets.QWidget()
+    self._southLayout = QtWidgets.QHBoxLayout()
     # Add a status bar
-    self._statusBar = QtGui.QStatusBar()
+    self._statusBar = QtWidgets.QStatusBar()
     self._statusBar.showMessage("Test message")
     self._southLayout.addWidget(self._statusBar)
     # self._southLayout.addStretch(1)
@@ -393,9 +393,9 @@ class gui3D(QtGui.QWidget):
 
   def getEastLayout(self):
     # This function just makes a dummy eastern layout to use.
-    label = QtGui.QLabel("Dummy")
-    self._eastWidget = QtGui.QWidget()
-    self._eastLayout = QtGui.QVBoxLayout()
+    label = QtWidgets.QLabel("Dummy")
+    self._eastWidget = QtWidgets.QWidget()
+    self._eastLayout = QtWidgets.QVBoxLayout()
     self._eastLayout.addWidget(label)
     self._eastLayout.addStretch(1)
     self._eastWidget.setLayout(self._eastLayout)
@@ -412,7 +412,7 @@ class gui3D(QtGui.QWidget):
 
     # for child in self.centerWidget.children():
     #   print type(child)
-    #   if type(child) == QtGui.QVBoxLayout:
+    #   if type(child) == QtWidgets.QVBoxLayout:
     #     layout = child
 
     # print layout.children()
@@ -457,8 +457,8 @@ class gui3D(QtGui.QWidget):
     # Put the layout together
 
 
-    self.master = QtGui.QVBoxLayout()
-    self.slave = QtGui.QHBoxLayout()
+    self.master = QtWidgets.QVBoxLayout()
+    self.slave = QtWidgets.QHBoxLayout()
     self.slave.addWidget(self.westWidget)
     self.slave.addLayout(self.centerLayout)
     self.slave.addWidget(self.eastWidget)
@@ -504,7 +504,7 @@ class gui3D(QtGui.QWidget):
 
   def screenCapture(self):
     print("Screen Capture!")
-    dialog = QtGui.QFileDialog()
+    dialog = QtWidgets.QFileDialog()
     r = self._event_manager.run()
     e = self._event_manager.event()
     s = self._event_manager.subrun()
@@ -517,7 +517,7 @@ class gui3D(QtGui.QWidget):
     # print filt
     # Print
     if (pg.Qt.QtVersion.startswith('4')):
-      pixmapImage = QtGui.QPixmap.grabWidget(self)
+      pixmapImage = QtWidgets.QPixmap.grabWidget(self)
       pixmapImage.save(f,"PNG")
     else:
       pixmapImage = super(gui3D, self).grab()

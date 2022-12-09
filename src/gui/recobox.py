@@ -1,7 +1,7 @@
-from pyqtgraph.Qt import QtGui, QtCore
+from pyqtgraph.Qt import QtWidgets, QtCore
 
 
-class ComboBoxWithKeyConnect(QtGui.QComboBox):
+class ComboBoxWithKeyConnect(QtWidgets.QComboBox):
 
     def __init__(self):
         super(ComboBoxWithKeyConnect, self).__init__()
@@ -33,14 +33,14 @@ class ComboBoxWithKeyConnect(QtGui.QComboBox):
 
 
 
-class recoBox(QtGui.QWidget):
+class recoBox(QtWidgets.QWidget):
     activated = QtCore.pyqtSignal(str)
 
     """docstring for recoBox"""
 
     def __init__(self, owner, name, product, producers):
         super(recoBox, self).__init__()
-        self._label = QtGui.QLabel()
+        self._label = QtWidgets.QLabel()
         self._name = name
         self._label.setText(self._name.capitalize() + ": ")
         self._box = ComboBoxWithKeyConnect()
@@ -56,7 +56,7 @@ class recoBox(QtGui.QWidget):
         self._box.connectOwnerKPE(owner.keyPressEvent)
 
         # This is the widget itself, so set it up
-        self._layout = QtGui.QVBoxLayout()
+        self._layout = QtWidgets.QVBoxLayout()
         self._layout.addWidget(self._label)
         self._layout.addWidget(self._box)
         self.setLayout(self._layout)
