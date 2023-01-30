@@ -11,7 +11,7 @@ from .view_manager3D import view_manager3D
 
 # Wrap the spin box class to allow key signals to pass to the gui
 
-class ConnectedSpinBox(QtWidgets.QSpinBox):
+class ConnectedSpinBox(QtWidgets.QDoubleSpinBox):
     """docstring for ConnectedSpinBox"""
     quitRequested = QtCore.pyqtSignal()
     def __init__(self):
@@ -209,9 +209,9 @@ class gui3D(QtWidgets.QWidget):
 
     # Get the min and max values for height, length, width:
 
-    width  = self._event_manager.meta().max_x() - self._event_manager.meta().min_x()
-    height = self._event_manager.meta().max_y() - self._event_manager.meta().min_y()
-    length = self._event_manager.meta().max_z() - self._event_manager.meta().min_z()
+    width  = int(self._event_manager.meta().max_x() - self._event_manager.meta().min_x())
+    height = int(self._event_manager.meta().max_y() - self._event_manager.meta().min_y())
+    length = int(self._event_manager.meta().max_z() - self._event_manager.meta().min_z())
     
 
     # Define the x,y,z location of the camera and world center

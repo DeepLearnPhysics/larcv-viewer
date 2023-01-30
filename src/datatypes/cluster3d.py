@@ -139,8 +139,8 @@ class cluster3d(recoBase3D):
         # # # Allocate enough memory for all 3 numpy arrays upfront:
 
         verts = numpy.zeros((n_voxels*8,3))
-        faces = numpy.zeros((n_voxels*12,3), dtype=numpy.int)
-        colors = numpy.zeros((n_voxels*12,4), dtype=numpy.int)
+        faces = numpy.zeros((n_voxels*12,3), dtype=numpy.int32)
+        colors = numpy.zeros((n_voxels*12,4), dtype=numpy.int32)
 
 
         i = 0

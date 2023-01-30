@@ -51,7 +51,12 @@ class bbox3d(recoBase3D):
             c  = bbox3d.centroid()
             hl = bbox3d.half_length()
 
-            if 0.0 in hl: continue
+            if hl[0] == 0:
+                hl[0] += 1
+            if hl[1] == 0:
+                hl[1] += 1
+            if hl[2] == 0:
+                hl[2] += 1
 
 
 
