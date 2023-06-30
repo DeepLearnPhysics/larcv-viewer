@@ -55,7 +55,9 @@ def main():
       args.config = larcv.ProcessDriver.default_config()
     # Else, convert it to json:
     else:
-        args.config = json.loads(args.config)
+        with open(args.config, 'r') as f:
+
+            args.config = json.loads(f.read())
 
     # If a file was passed, give it to the manager:
     if len(args.file) > 0:
